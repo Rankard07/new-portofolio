@@ -23,34 +23,36 @@ function App() {
 
 export default App;
  */
-
+import { ThemeProvider } from "@/components/ui/created/theme-provider";
 import { Navbar } from "@/components/ui/created/Navbar";
 import { AboutSection } from "@/pages/AboutSection";
-import { ContactSection } from "@/pages/ContactSection";
+// import { ContactSection } from "@/pages/ContactSection";
+// import { ProjectsSection } from "@/pages/ProjectSection";
 import { HeroSection } from "@/pages/HeroSection";
-import { ProjectsSection } from "@/pages/ProjectSection";
 import { SkillsSection } from "@/pages/SkillSection";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <div className="min-h-screen bg-background">
+        <Navbar />
 
-      <HeroSection />
-      <AboutSection />
-      <SkillsSection />
-      <ProjectsSection />
-      <ContactSection />
+        <HeroSection />
+        <AboutSection />
+        <SkillsSection />
+        {/* <ProjectsSection />
+        <ContactSection /> */}
 
-      {/* Footer */}
-      <footer className="border-t border-border py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center text-muted-foreground">
-          <p>
-            &copy; {new Date().getFullYear()} Your
-            Name. Built with React & Tailwind CSS.
-          </p>
-        </div>
-      </footer>
-    </div>
+        {/* Footer */}
+        <footer className="border-t border-border py-8 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto text-center text-muted-foreground">
+            <p>
+              &copy; {new Date().getFullYear()} Your Name. Built with React &
+              Tailwind CSS.
+            </p>
+          </div>
+        </footer>
+      </div>
+    </ThemeProvider>
   );
 }

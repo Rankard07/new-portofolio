@@ -1,0 +1,71 @@
+import { cva } from "class-variance-authority";
+
+export const buttonVariants = cva(
+  "group/button inline-flex shrink-0 items-center justify-center rounded-4xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/80",
+        outline:
+          "border-border bg-input/30 hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+        ghost:
+          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
+        destructive:
+          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
+        link: "text-primary underline-offset-4 hover:underline",
+        // DaisyUI Variants
+        daisyPrimary:
+          "bg-[#570af2] text-white hover:bg-[#4506cb] border-transparent",
+        daisySecondary:
+          "bg-[#f000b8] text-white hover:bg-[#c40096] border-transparent",
+        daisyAccent:
+          "bg-[#37cdbe] text-[#1f2937] hover:bg-[#2aa79b] border-transparent",
+        daisySuccess:
+          "bg-[#00a96e] text-white hover:bg-[#008c5b] border-transparent shadow-sm",
+        daisyWarning:
+          "bg-[#ffbe00] text-[#1f2937] hover:bg-[#e6ab00] border-transparent",
+        daisyInfo:
+          "bg-[#00b5ff] text-white hover:bg-[#0096d6] border-transparent",
+        daisyError:
+          "bg-[#ff5861] text-white hover:bg-[#e64f57] border-transparent",
+        daisyGhost:
+          "hover:bg-current/10 bg-transparent text-current border-transparent",
+        "daisy-outline-success":
+          "border-[#00a96e] text-[#00a96e] bg-transparent hover:bg-[#00a96e] hover:text-white border-2",
+        "daisy-outline-warning":
+          "border-[#ffbe00] text-[#ffbe00] bg-transparent hover:bg-[#ffbe00] hover:text-white border-2",
+        "daisy-outline-info":
+          "border-[#00b5ff] text-[#00b5ff] bg-transparent hover:bg-[#00b5ff] hover:text-white border-2",
+        "daisy-outline-error":
+          "border-[#ff5861] text-[#ff5861] bg-transparent hover:bg-[#ff5861] hover:text-white border-2",
+        customDanger:
+          "bg-red-600 text-white hover:bg-red-700 border-none shadow-md",
+        customSuccess:
+          "bg-green-600 text-white hover:bg-green-700 border-none shadow-md",
+        customWarning:
+          "bg-yellow-600 text-white hover:bg-yellow-700 border-none shadow-md",
+        customInfo:
+          "bg-blue-600 text-white hover:bg-blue-700 border-none shadow-md",
+        customSpecial:
+          "bg-purple-600 text-white hover:bg-purple-700 border-none shadow-md",
+      },
+      size: {
+        default:
+          "h-9 gap-1.5 px-3 has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5",
+        xs: "h-6 gap-1 px-2.5 text-xs has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-8 gap-1 px-3 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+        lg: "h-10 gap-1.5 px-4 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
+        icon: "size-9",
+        "icon-xs": "size-6 [&_svg:not([class*='size-'])]:size-3",
+        "icon-sm": "size-8",
+        "icon-lg": "size-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  },
+);
