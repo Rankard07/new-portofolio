@@ -1,8 +1,8 @@
 // import { useState } from "react";
-import { Code2, Sun, Moon } from "lucide-react";
-import { useTheme } from "./theme-context";
+import { Code2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MobileHamburger } from "./MobileHamburger";
+import ThemeModeToggle from "./ModeToggle";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -63,7 +63,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
 // SUB-COMPONENTS
 // ============================================
 
-function ThemeToggle() {
+/* function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -85,7 +85,7 @@ function ThemeToggle() {
       {isDark ? <Sun size={20} /> : <Moon size={20} />}
     </button>
   );
-}
+} */
 
 // ============================================
 // MAIN COMPONENT
@@ -126,12 +126,12 @@ export function Navbar({
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
-            <ThemeToggle />
+            <ThemeModeToggle />
           </div>
 
           {/* Mobile Controls */}
           <div className="md:hidden flex items-center gap-2">
-            <ThemeToggle />
+            <ThemeModeToggle />
             <MobileHamburger items={items} />
           </div>
         </div>

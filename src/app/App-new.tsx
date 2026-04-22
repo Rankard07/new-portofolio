@@ -1,10 +1,10 @@
 import { ThemeProvider } from "@/components/ui/created/theme-provider";
 import { Navbar } from "@/components/ui/created/Navbar";
+import { HeroSection } from "@/pages/HeroSection";
 import { AboutSection } from "@/pages/AboutSection";
+import { SkillsSection } from "@/pages/SkillSection";
 // import { ContactSection } from "@/pages/ContactSection";
 // import { ProjectsSection } from "@/pages/ProjectSection";
-import { HeroSection } from "@/pages/HeroSection";
-import { SkillsSection } from "@/pages/SkillSection";
 import Footer from "@/pages/Footer";
 
 export default function App() {

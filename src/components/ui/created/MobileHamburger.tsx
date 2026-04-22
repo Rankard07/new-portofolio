@@ -76,7 +76,7 @@ export function MobileHamburger({
       </SheetTrigger>
 
       {/* Smoothly Sliding Content */}
-      <SheetContent side="top" className="w-[300px] sm:w-[400px]">
+      <SheetContent side="top" className="w-75 sm:w-100">
         <SheetHeader>
           <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
