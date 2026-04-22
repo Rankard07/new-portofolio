@@ -23,14 +23,14 @@ export default function ThemeModeToggle() {
 
   return (
     <Switch
-      size="lg"
+      size="sm"
       checked={isDark}
       onCheckedChange={toggleTheme}
       thumbChildren={
         isDark ? (
-          <Moon className="h-4 w-4 text-background" />
+          <Moon className="h-3 w-3 text-background" />
         ) : (
-          <Sun className="h-4 w-4 text-foreground" />
+          <Sun className="h-3 w-3 text-foreground" />
         )
       }
     />
