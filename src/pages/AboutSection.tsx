@@ -66,14 +66,26 @@ export function AboutSection({
   skills = DEFAULT_SKILLS,
 }: AboutSectionProps) {
   return (
-    <section id="about" className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="about" className="py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-card border border-border rounded-xl p-8 lg:p-12 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10">
-          <div className="flex items-center gap-3 mb-8">
+        <div className="bg-card border border-border rounded-xl p-8 lg:p-12 transition duration-500 ease-in-out hover:border-fuchsia-500/50 dark:hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 hover:scale-105 relative overflow-hidden group">
+          {/* Light mode hover overlay - pink/purple */}
+          <div className="absolute inset-0 bg-linear-to-b from-fuchsia-500/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:hidden pointer-events-none"></div>
+          {/* Dark mode hover overlay */}
+          <div className="absolute inset-0 bg-linear-to-b from-slate-800 to-slate-950 opacity-0 transition-opacity duration-500 group-hover:opacity-100 hidden dark:block pointer-events-none"></div>
+          {/* Top-center shine line - light mode pink/purple */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-linear-to-r from-transparent via-fuchsia-500/80 to-transparent blur-[1px] opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:hidden pointer-events-none"></div>
+          {/* Top-center glow area - light mode pink/purple */}
+          <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1/2 h-10 bg-fuchsia-500/25 blur-2xl rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:hidden pointer-events-none"></div>
+          {/* Top-center shine line - dark mode blue */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-linear-to-r from-transparent via-primary/80 to-transparent blur-[1px] opacity-0 transition-opacity duration-500 group-hover:opacity-100 hidden dark:block pointer-events-none"></div>
+          {/* Top-center glow area - dark mode blue */}
+          <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1/2 h-10 bg-primary/25 blur-2xl rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100 hidden dark:block pointer-events-none"></div>
+          <div className="relative flex items-center gap-3 mb-8">
             <div className="w-12 h-1 bg-primary"></div>
             <h2>About Me</h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="relative grid md:grid-cols-2 gap-12">
             {/* Bio Section */}
             <div>
               <p className="text-muted-foreground mb-4">{paragraph1}</p>

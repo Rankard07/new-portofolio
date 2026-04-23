@@ -99,11 +99,13 @@ export function Navbar({
   return (
     <nav
       className={cn(
-        "sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border",
+        "sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border w-full",
         className,
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> */}
+      {/* <div className="max-w-full xl:max-w-7xl xl:mx-auto px-4 sm:px-6 lg:px-8"> */}
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo Section */}
           <div className={cn("flex items-center gap-2", logo.className)}>
@@ -118,7 +120,7 @@ export function Navbar({
                 {items.map((item) => (
                   <NavigationMenuItem key={item.href}>
                     <NavigationMenuLink asChild href={item.href}>
-                      <a className="hover:text-primary transition-colors">
+                      <a className="hover:text-blue-400 transition-colors">
                         {item.title}
                       </a>
                     </NavigationMenuLink>

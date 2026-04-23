@@ -11,14 +11,19 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="min-h-screen bg-background">
-        <Navbar />
+        {/* Navbar */}
+        <Navbar className="w-full" />
 
-        <HeroSection />
-        <AboutSection />
-        <SkillsSection />
-        {/* <ProjectsSection />
-        <ContactSection /> */}
+        {/* Section */}
+        <div className="max-w-281.5 mx-auto ">
+          <HeroSection />
+          <AboutSection />
+          <SkillsSection />
+          {/* <ProjectsSection /> */}
+          {/* <ContactSection /> */}
+        </div>
 
+        {/* Footer */}
         <Footer />
       </div>
     </ThemeProvider>
