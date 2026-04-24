@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { SkillBadge } from "@/components/ui/created/SkillBadge";
+import { CardHoverOverlays } from "@/components/ui/created/CardHoverOverlays";
 import {
   SiReact,
   SiJavascript,
@@ -14,7 +16,8 @@ import {
   SiNpm,
   SiDaisyui,
 } from "react-icons/si";
-import { LuPalette, LuSmartphone, LuLayers } from "react-icons/lu";
+import { Palette, Smartphone, Layers } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // ============================================
 // CONSTANTS (Skill Icons)
@@ -62,13 +65,13 @@ const DESIGN_ICONS = [
   },
   {
     name: "UI/UX Design",
-    icon: <LuPalette className="text-primary" />,
+    icon: <Palette className="text-primary" />,
   },
   {
     name: "Responsive Design",
-    icon: <LuSmartphone className="text-primary" />,
+    icon: <Smartphone className="text-primary" />,
   },
-  { name: "Prototyping", icon: <LuLayers className="text-primary" /> },
+  { name: "Prototyping", icon: <Layers className="text-primary" /> },
 ];
 
 const TOOLS_ICONS = [
@@ -99,58 +102,126 @@ const TOOLS_ICONS = [
 // ============================================
 
 export function SkillsSection() {
+  const [activeTab, setActiveTab] = useState<"skills" | "techstack">("skills");
+
   return (
     <section id="skills" className="py-10 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="bg-card border border-border rounded-xl p-8 lg:p-12 transition duration-500 ease-in-out hover:border-fuchsia-500/50 dark:hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 hover:scale-105 relative overflow-hidden group">
-          {/* Light mode hover overlay - pink/purple */}
-          <div className="absolute inset-0 bg-linear-to-b from-fuchsia-500/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:hidden pointer-events-none"></div>
-          {/* Dark mode hover overlay */}
-          <div className="absolute inset-0 bg-linear-to-b from-slate-800 to-slate-950 opacity-0 transition-opacity duration-500 group-hover:opacity-100 hidden dark:block pointer-events-none"></div>
-          {/* Top-center shine line - light mode pink/purple */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-linear-to-r from-transparent via-fuchsia-500/80 to-transparent blur-[1px] opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:hidden pointer-events-none"></div>
-          {/* Top-center glow area - light mode pink/purple */}
-          <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1/2 h-10 bg-fuchsia-500/25 blur-2xl rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:hidden pointer-events-none"></div>
-          {/* Top-center shine line - dark mode blue */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-linear-to-r from-transparent via-primary/80 to-transparent blur-[1px] opacity-0 transition-opacity duration-500 group-hover:opacity-100 hidden dark:block pointer-events-none"></div>
-          {/* Top-center glow area - dark mode blue */}
-          <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1/2 h-10 bg-primary/25 blur-2xl rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100 hidden dark:block pointer-events-none"></div>
-          <div className="relative flex items-center gap-3 mb-8">
+          <CardHoverOverlays />
+          <div className="relative z-10 flex items-center gap-3 mb-8">
             <div className="w-12 h-1 bg-primary"></div>
             <h2>Skills & Technologies</h2>
           </div>
 
-          <div className="relative space-y-12">
-            {/* Front-End Development */}
-            <div>
-              <h3 className="mb-4">Front-End Development</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {FRONTEND_ICONS.map((skill, index) => (
-                  <SkillBadge key={index} name={skill.name} icon={skill.icon} />
-                ))}
-              </div>
-            </div>
-
-            {/* Design & UX */}
-            <div>
-              <h3 className="mb-4">Design & UX</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {DESIGN_ICONS.map((skill, index) => (
-                  <SkillBadge key={index} name={skill.name} icon={skill.icon} />
-                ))}
-              </div>
-            </div>
-
-            {/* Tools & Workflow */}
-            <div>
-              <h3 className="mb-4">Tools & Workflow</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                {TOOLS_ICONS.map((skill, index) => (
-                  <SkillBadge key={index} name={skill.name} icon={skill.icon} />
-                ))}
-              </div>
-            </div>
+          {/* Tabs */}
+          <div className="relative z-10 flex gap-1 mb-8 bg-muted/50 p-1 rounded-lg w-fit">
+            <button
+              onClick={() => setActiveTab("skills")}
+              className={cn(
+                "px-4 py-2 rounded-md text-sm font-medium transition-all duration-200",
+                activeTab === "skills"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
+              )}
+            >
+              Skills
+            </button>
+            <button
+              onClick={() => setActiveTab("techstack")}
+              className={cn(
+                "px-4 py-2 rounded-md text-sm font-medium transition-all duration-200",
+                activeTab === "techstack"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
+              )}
+            >
+              Tech Stack
+            </button>
           </div>
+
+          {activeTab === "skills" && (
+            <div className="relative z-10 space-y-12">
+              {/* Front-End Development */}
+              <div>
+                <h3 className="mb-4">Front-End Development</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                  {FRONTEND_ICONS.map((skill, index) => (
+                    <SkillBadge
+                      key={index}
+                      name={skill.name}
+                      icon={skill.icon}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Design & UX */}
+              <div>
+                <h3 className="mb-4">Design & UX</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {DESIGN_ICONS.map((skill, index) => (
+                    <SkillBadge
+                      key={index}
+                      name={skill.name}
+                      icon={skill.icon}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Tools & Workflow */}
+              <div>
+                <h3 className="mb-4">Tools & Workflow</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                  {TOOLS_ICONS.map((skill, index) => (
+                    <SkillBadge
+                      key={index}
+                      name={skill.name}
+                      icon={skill.icon}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "techstack" && (
+            <div className="relative z-10 space-y-8">
+              <p className="text-muted-foreground">
+                My primary development stack and technologies I work with daily.
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {[
+                  { name: "React", desc: "UI Library", color: "#61DAFB" },
+                  { name: "TypeScript", desc: "Type Safety", color: "#3178C6" },
+                  { name: "Tailwind CSS", desc: "Styling", color: "#06B6D4" },
+                  { name: "Vite", desc: "Build Tool", color: "#646CFF" },
+                  { name: "Next.js", desc: "Framework", color: "#000000" },
+                  { name: "Node.js", desc: "Runtime", color: "#339933" },
+                  { name: "Git", desc: "Version Control", color: "#F05032" },
+                  { name: "Figma", desc: "Design", color: "#F24E1E" },
+                  { name: "Blender", desc: "3D Modeling", color: "#E87D0D" },
+                ].map((tech, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 p-4 border border-border rounded-lg hover:border-primary/30 transition-all duration-200 hover:shadow-md hover:shadow-primary/5"
+                  >
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: tech.color }}
+                    />
+                    <div>
+                      <p className="font-medium text-sm">{tech.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {tech.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
