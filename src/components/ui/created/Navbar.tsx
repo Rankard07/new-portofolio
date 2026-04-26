@@ -1,8 +1,24 @@
-import { Code2, ChevronDown, Mail, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { Code2, Mail, ExternalLink, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MobileHamburger } from "./MobileHamburger";
 import ThemeModeToggle from "./ModeToggle";
-import { useState, useRef, useEffect } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
+} from "@/components/ui/navigation-menu";
+import { ListItem } from "@/components/ui/created/ListItem";
+import { FaLinkedinIn } from "react-icons/fa";
+import { PAGES, DEFAULT_CONTACT_ITEMS } from "./navbar-config";
 
 // ============================================
 // INTERFACES (Type Definitions)
@@ -16,8 +32,8 @@ interface NavbarLogo {
 
 interface NavbarProps {
   logo?: NavbarLogo;
-  activePage?: "home" | "project" | "gallery";
-  onPageChange?: (page: "home" | "project" | "gallery") => void;
+  activePage?: string;
+  onPageChange?: (page: string) => void;
   className?: string;
 }
 
@@ -30,17 +46,93 @@ const DEFAULT_LOGO: NavbarLogo = {
   icon: <Code2 className="text-primary" size={24} />,
 };
 
-const CENTER_PAGES: { id: "home" | "project" | "gallery"; label: string }[] = [
-  { id: "home", label: "Home" },
-  { id: "project", label: "Project" },
-  { id: "gallery", label: "Gallery" },
-];
+// Icon mapping for desktop Contact dropdown
+const DESKTOP_CONTACT_ICONS: Record<string, React.ReactNode> = {
+  Email: <Mail size={16} />,
+  LinkedIn: <FaLinkedinIn size={16} />,
+  GitHub: <ExternalLink size={16} />,
+};
 
 // ============================================
-// SUB-COMPONENT: Contact Dropdown
+// SUB-COMPONENT: Desktop Contact Dropdown
 // ============================================
 
 function ContactDropdown() {
+  return (
+    <div>
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Contact</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150">
+                {DEFAULT_CONTACT_ITEMS.map((item, index) => (
+                  <ListItem key={index} href={item.href}>
+                    <a className="flex items-center gap-2">
+                      {DESKTOP_CONTACT_ICONS[item.label] ?? (
+                        <ExternalLink size={16} />
+                      )}
+                      {item.label}
+                    </a>
+                  </ListItem>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </div>
+  );
+}
+
+// ============================================
+// SUB-COMPONENT: Mobile Page Dropdown (Center)
+// ============================================
+
+function MobilePageDropdown({
+  activePage,
+  onPageChange,
+}: {
+  activePage?: string;
+  onPageChange?: (page: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const activeLabel = PAGES.find((p) => p.id === activePage)?.label ?? "Menu";
+
+  return (
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger className="flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-full bg-muted/50 border border-border/50 hover:bg-muted transition-colors">
+        {activeLabel}
+        <ChevronDown
+          size={16}
+          className={cn(
+            "transition-transform duration-200",
+            open && "rotate-180",
+          )}
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="center" className="min-w-35">
+        {PAGES.map((page) => (
+          <DropdownMenuItem
+            key={page.id}
+            onClick={() => {
+              onPageChange?.(page.id);
+              setOpen(false);
+            }}
+            className={cn(
+              "cursor-pointer",
+              activePage === page.id && "bg-accent",
+            )}
+          >
+            {page.label}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+/* function ContactDropdown() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -94,7 +186,7 @@ function ContactDropdown() {
       )}
     </div>
   );
-}
+} */
 
 // ============================================
 // MAIN COMPONENT
@@ -115,16 +207,17 @@ export function Navbar({
     >
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-16">
-          {/* Logo Section - Kiri */}
+          {/* Logo Section - Left */}
           <div className={cn("flex items-center gap-2", logo.className)}>
             {logo.icon}
             <span className="font-medium">{logo.title}</span>
           </div>
 
-          {/* Center Navigation - Pill Toggle */}
-          <div className="hidden md:flex flex-1 justify-center items-center">
-            <div className="flex items-center gap-0 bg-muted/50 rounded-full p-1 border border-border/50 relative">
-              {CENTER_PAGES.map((page) => (
+          {/* Center Navigation - Desktop: Pill Toggle, Mobile: Dropdown */}
+          <div className="flex flex-1 justify-center items-center">
+            {/* Desktop Pill Toggle */}
+            <div className="hidden md:flex items-center gap-0 bg-muted/50 rounded-full p-1 border border-border/50 relative">
+              {PAGES.map((page) => (
                 <button
                   key={page.id}
                   onClick={() => onPageChange?.(page.id)}
@@ -150,24 +243,26 @@ export function Navbar({
                 </button>
               ))}
             </div>
+
+            {/* Mobile Page Dropdown - Center */}
+            <div className="md:hidden">
+              <MobilePageDropdown
+                activePage={activePage}
+                onPageChange={onPageChange}
+              />
+            </div>
           </div>
 
-          {/* Right Navigation - Contact Dropdown + Theme Toggle */}
+          {/* Right Navigation - Desktop: Contact Dropdown + Theme Toggle */}
           <div className="hidden md:flex items-center gap-3">
             <ContactDropdown />
             <ThemeModeToggle />
           </div>
 
-          {/* Mobile Controls */}
-          <div className="md:hidden flex items-center gap-2 ml-auto">
+          {/* Mobile Controls - Contact Hamburger + Theme Toggle */}
+          <div className="md:hidden flex items-center gap-2">
             <ThemeModeToggle />
-            <MobileHamburger
-              items={[
-                { title: "Home", href: "#home" },
-                { title: "Project", href: "#project" },
-                { title: "Gallery", href: "#gallery" },
-              ]}
-            />
+            <MobileHamburger />
           </div>
         </div>
       </div>

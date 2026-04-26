@@ -4,9 +4,12 @@ import { createRoot } from "react-dom/client";
 import "./style/global.css";
 // import App from "./App.tsx";
 import App from "./app/App-new.tsx";
+import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  <BrowserRouter>
+    <StrictMode>
+      <App />
+    </StrictMode>
+  </BrowserRouter>,
 );

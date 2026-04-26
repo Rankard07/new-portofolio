@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Mail, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -8,47 +8,27 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { FaLinkedinIn } from "react-icons/fa";
+import { type ContactItem, DEFAULT_CONTACT_ITEMS } from "./navbar-config";
 
-interface NavItem {
-  title: string;
-  href: string;
-}
+// Icon mapping by label (easy to extend)
+const CONTACT_ICON_MAP: Record<string, React.ReactNode> = {
+  Email: <Mail size={18} />,
+  LinkedIn: <FaLinkedinIn size={18} />,
+  GitHub: <ExternalLink size={18} />,
+};
 
 interface MobileHamburgerProps {
-  items?: NavItem[];
+  contactItems?: ContactItem[];
 }
 
-const DEFAULT_NAV_ITEMS: NavItem[] = [
-  {
-    title: "About",
-    href: "#about",
-  },
-  {
-    title: "Skills",
-    href: "#skills",
-  },
-  {
-    title: "Projects",
-    href: "#projects",
-  },
-  {
-    title: "Contact",
-    href: "#contact",
-  },
-];
-
 export function MobileHamburger({
-  items = DEFAULT_NAV_ITEMS,
+  contactItems = DEFAULT_CONTACT_ITEMS,
 }: MobileHamburgerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLinkClick = () => {
-    setIsOpen(false);
-  };
-
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      {/* Trigger Button with Smooth Rotation */}
       <SheetTrigger asChild>
         <Button
           variant="ghost"
@@ -75,20 +55,25 @@ export function MobileHamburger({
         </Button>
       </SheetTrigger>
 
-      {/* Smoothly Sliding Content */}
-      <SheetContent side="top" className="w-75 sm:w-100">
+      <SheetContent
+        side="top"
+        className="w-full max-w-md mx-auto rounded-b-2xl"
+      >
         <SheetHeader>
-          <SheetTitle>Menu</SheetTitle>
+          <SheetTitle>Contact</SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col gap-2 mt-6">
-          {items.map((item) => (
+          {contactItems.map((item) => (
             <a
-              key={item.href}
+              key={item.label}
               href={item.href}
-              onClick={handleLinkClick}
-              className="px-4 py-3 text-lg font-medium rounded-xl hover:bg-accent transition-colors"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 text-lg font-medium rounded-xl hover:bg-accent transition-colors"
             >
-              {item.title}
+              {CONTACT_ICON_MAP[item.label] ?? <ExternalLink size={18} />}
+              {item.label}
             </a>
           ))}
         </nav>

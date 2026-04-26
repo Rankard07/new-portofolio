@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ThemeProvider } from "@/components/ui/created/theme-provider";
 import { Navbar } from "@/components/ui/created/Navbar";
+import { PAGES } from "@/components/ui/created/navbar-config";
 import { HeroSection } from "@/pages/HeroSection";
 import { AboutSection } from "@/pages/AboutSection";
 import { SkillsSection } from "@/pages/SkillSection";
@@ -10,7 +11,7 @@ import { GallerySection } from "@/pages/GallerySection";
 import Footer from "@/pages/Footer";
 import { AnimatePresence, motion } from "motion/react";
 
-type Page = "home" | "project" | "gallery";
+type Page = (typeof PAGES)[number]["id"];
 
 const pageVariants = {
   // Entry animation from left/right
@@ -34,12 +35,14 @@ export default function App() {
   const [page, setPage] = useState<Page>("home");
   const [direction, setDirection] = useState(0);
 
-  const handlePageChange = (newPage: Page) => {
-    const pages: Page[] = ["home", "project", "gallery"];
-    const currentIndex = pages.indexOf(page);
-    const newIndex = pages.indexOf(newPage);
+  const allPageIds = PAGES.map((p) => p.id) as [Page, ...Page[]];
+
+  const handlePageChange = (newPage: string) => {
+    if (!allPageIds.includes(newPage as Page)) return;
+    const currentIndex = allPageIds.indexOf(page);
+    const newIndex = allPageIds.indexOf(newPage as Page);
     setDirection(newIndex > currentIndex ? 1 : -1);
-    setPage(newPage);
+    setPage(newPage as Page);
   };
 
   return (
