@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Code2, Mail, ExternalLink, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MobileHamburger } from "./MobileHamburger";
-import ThemeModeToggle from "./ModeToggle";
+// import ThemeModeToggle from "./ModeToggle";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -19,6 +19,8 @@ import {
 import { ListItem } from "@/components/ui/created/ListItem";
 import { FaLinkedinIn } from "react-icons/fa";
 import { PAGES, DEFAULT_CONTACT_ITEMS } from "./navbar-config";
+import { AnimatedThemeToggler } from "../animated-theme-toggler";
+import { motion } from "motion/react";
 
 // ============================================
 // INTERFACES (Type Definitions)
@@ -199,73 +201,92 @@ export function Navbar({
   className,
 }: NavbarProps) {
   return (
-    <nav
+    <motion.nav
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{
+        type: "spring",
+        stiffness: 100,
+        damping: 20,
+        delay: 0.1,
+        visualDuration: 0.4,
+        bounce: 0.6,
+      }}
       className={cn(
         "sticky top-0 z-50 bg-background/80 backdrop-blur-sm w-full",
         className,
       )}
     >
-      <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-16">
-          {/* Logo Section - Left */}
-          <div className={cn("flex items-center gap-2", logo.className)}>
-            {logo.icon}
-            <span className="font-medium">{logo.title}</span>
-          </div>
-
-          {/* Center Navigation - Desktop: Pill Toggle, Mobile: Dropdown */}
-          <div className="flex flex-1 justify-center items-center">
-            {/* Desktop Pill Toggle */}
-            <div className="hidden md:flex items-center gap-0 bg-muted/50 rounded-full p-1 border border-border/50 relative">
-              {PAGES.map((page) => (
-                <button
-                  key={page.id}
-                  onClick={() => onPageChange?.(page.id)}
-                  className={cn(
-                    "relative px-5 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
-                    activePage === page.id
-                      ? "bg-muted text-muted-foreground animate-pulse"
-                      : "",
-                  )}
-                >
-                  {/* --- EFEK SINAR (Hanya muncul jika aktif) --- */}
-                  {activePage === page.id && (
-                    <>
-                      {/* Sinar Inti - Sangat Terang */}
-                      <span className="absolute animate-pulse top-0 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-white rounded-full shadow-[0_0_8px_2px_rgba(255,255,255,0.9),0_0_15px_5px_rgba(255,255,255,0.4)] z-10" />
-
-                      {/* Pendaran Atmosfer (Aura) - Lebih Luas */}
-                      <span className="absolute animate-pulse top-0 left-1/2 -translate-x-1/2 w-16 h-1.5 bg-white/40 blur-md rounded-full opacity-80" />
-                    </>
-                  )}
-
-                  {page.label}
-                </button>
-              ))}
+      <nav
+        className={cn(
+          "sticky top-0 z-50 bg-background/80 backdrop-blur-sm w-full",
+          className,
+        )}
+      >
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center h-16">
+            {/* Logo Section - Left */}
+            <div className={cn("flex items-center gap-2", logo.className)}>
+              {logo.icon}
+              <span className="font-medium">{logo.title}</span>
             </div>
 
-            {/* Mobile Page Dropdown - Center */}
-            <div className="md:hidden">
-              <MobilePageDropdown
-                activePage={activePage}
-                onPageChange={onPageChange}
-              />
+            {/* Center Navigation - Desktop: Pill Toggle, Mobile: Dropdown */}
+            <div className="flex flex-1 justify-center items-center">
+              {/* Desktop Pill Toggle */}
+              <div className="hidden md:flex items-center gap-0 bg-muted/50 rounded-full p-1 border border-border/50 relative">
+                {PAGES.map((page) => (
+                  <button
+                    key={page.id}
+                    onClick={() => onPageChange?.(page.id)}
+                    className={cn(
+                      "relative px-5 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
+                      activePage === page.id
+                        ? "bg-muted text-muted-foreground animate-pulse"
+                        : "",
+                    )}
+                  >
+                    {/* --- EFEK SINAR (Hanya muncul jika aktif) --- */}
+                    {activePage === page.id && (
+                      <>
+                        {/* Sinar Inti - Sangat Terang */}
+                        <span className="absolute animate-pulse top-0 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-foreground dark:bg-white rounded-full shadow-[0_0_8px_2px_rgba(0,0,0,0.5),0_0_15px_5px_rgba(0,0,0,0.2)] dark:shadow-[0_0_8px_2px_rgba(255,255,255,0.9),0_0_15px_5px_rgba(255,255,255,0.4)] z-10" />
+
+                        {/* Pendaran Atmosfer (Aura) - Lebih Luas */}
+                        <span className="absolute animate-pulse top-0 left-1/2 -translate-x-1/2 w-16 h-1.5 bg-foreground/30 dark:bg-white/40 blur-md rounded-full opacity-80" />
+                      </>
+                    )}
+
+                    {page.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Mobile Page Dropdown - Center */}
+              <div className="md:hidden">
+                <MobilePageDropdown
+                  activePage={activePage}
+                  onPageChange={onPageChange}
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Right Navigation - Desktop: Contact Dropdown + Theme Toggle */}
-          <div className="hidden md:flex items-center gap-3">
-            <ContactDropdown />
-            <ThemeModeToggle />
-          </div>
+            {/* Right Navigation - Desktop: Contact Dropdown + Theme Toggle */}
+            <div className="hidden md:flex items-center gap-3">
+              <ContactDropdown />
+              {/* <ThemeModeToggle /> */}
+              <AnimatedThemeToggler />
+            </div>
 
-          {/* Mobile Controls - Contact Hamburger + Theme Toggle */}
-          <div className="md:hidden flex items-center gap-2">
-            <ThemeModeToggle />
-            <MobileHamburger />
+            {/* Mobile Controls - Contact Hamburger + Theme Toggle */}
+            <div className="md:hidden flex items-center gap-2">
+              {/* <ThemeModeToggle /> */}
+              <AnimatedThemeToggler />
+              <MobileHamburger />
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </motion.nav>
   );
 }

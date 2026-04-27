@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeProvider } from "@/components/ui/created/theme-provider";
 import { Navbar } from "@/components/ui/created/Navbar";
 import { PAGES } from "@/components/ui/created/navbar-config";
@@ -22,13 +22,21 @@ const pageVariants = {
   // Where animation stop (middle)
   animate: {
     x: 0,
+    y: 0,
     opacity: 1,
+    scale: 1,
   },
   // Exit animation to left/right
   exit: (direction: number) => ({
     x: direction > 0 ? -300 : 300,
     opacity: 0,
   }),
+
+  firstLoad: {
+    // y: 40,
+    opacity: 0,
+    scale: 0.9,
+  },
 };
 
 export default function App() {
@@ -44,6 +52,24 @@ export default function App() {
     setDirection(newIndex > currentIndex ? 1 : -1);
     setPage(newPage as Page);
   };
+
+  // Entry Animation
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+
+  useEffect(() => {
+    // Nonaktifkan scroll restoration browser
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    // Scroll ke atas saat pertama kali load
+    window.scrollTo(0, 0);
+
+    const timer = setTimeout(() => {
+      setIsFirstLoad(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -65,10 +91,17 @@ export default function App() {
               key={page}
               custom={direction}
               variants={pageVariants}
-              initial="initial"
+              initial={isFirstLoad ? "firstLoad" : "initial"}
+              // initial="initial"
               animate="animate"
               exit="exit"
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+                visualDuration: 0.7,
+                delay: isFirstLoad ? 0.2 : 0,
+              }}
               className="w-full"
             >
               {page === "home" && (
