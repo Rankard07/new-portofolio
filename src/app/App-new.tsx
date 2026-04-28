@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { ThemeProvider } from "@/components/ui/created/theme-provider";
 import { Navbar } from "@/components/ui/created/Navbar";
 import { PAGES } from "@/components/ui/created/navbar-config";
-import { HeroSection } from "@/pages/HeroSection";
-import { AboutSection } from "@/pages/AboutSection";
-import { SkillsSection } from "@/pages/SkillSection";
-import { ProjectsSection } from "@/pages/ProjectSection";
-import { GallerySection } from "@/pages/GallerySection";
+import { HeroSection } from "@/pages/home/HeroSection";
+import { AboutSection } from "@/pages/home/AboutSection";
+import { SkillsSection } from "@/pages/home/SkillSection";
+import { ProjectsSection } from "@/pages/project/ProjectSection";
+import { OtherSection } from "@/pages/other/OtherSection";
 // import { TableOfContents } from "@/components/ui/created/TableOfContents";
 import Footer from "@/pages/Footer";
 import { AnimatePresence, motion } from "motion/react";
@@ -43,7 +43,10 @@ export default function App() {
   const [page, setPage] = useState<Page>("home");
   const [direction, setDirection] = useState(0);
 
-  const allPageIds = PAGES.map((p) => p.id) as [Page, ...Page[]];
+  const allPageIds = PAGES.map((p) => p.id) as [
+    Page,
+    ...Page[],
+  ];
 
   const handlePageChange = (newPage: string) => {
     if (!allPageIds.includes(newPage as Page)) return;
@@ -72,7 +75,10 @@ export default function App() {
   }, []);
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider
+      defaultTheme="dark"
+      storageKey="vite-ui-theme"
+    >
       <div className="min-h-screen bg-background">
         {/* Navbar */}
         <Navbar
@@ -91,15 +97,19 @@ export default function App() {
               key={page}
               custom={direction}
               variants={pageVariants}
-              initial={isFirstLoad ? "firstLoad" : "initial"}
+              initial={
+                isFirstLoad ? "firstLoad" : "initial"
+              }
               // initial="initial"
               animate="animate"
               exit="exit"
               transition={{
+                // type: "tween",
+                // duration: 4,
                 type: "spring",
-                stiffness: 300,
-                damping: 30,
-                visualDuration: 0.7,
+                stiffness: 100,
+                damping: 20,
+                visualDuration: 0.4,
                 delay: isFirstLoad ? 0.2 : 0,
               }}
               className="w-full"
@@ -124,9 +134,9 @@ export default function App() {
                 </div>
               )}
 
-              {page === "gallery" && (
+              {page === "other" && (
                 <div className="max-w-[70rem] mx-auto px-4 sm:px-6 lg:px-8">
-                  <GallerySection />
+                  <OtherSection />
                 </div>
               )}
             </motion.div>

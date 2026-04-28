@@ -1,6 +1,7 @@
+import { CardHoverOverlays } from "@/components/ui/created/CardHoverOverlays";
 import { Box, Camera, Layers } from "lucide-react";
 
-export function GallerySection() {
+export function OtherSection() {
   const blenderProjects = [
     {
       title: "Character Modeling",
@@ -23,16 +24,17 @@ export function GallerySection() {
   ];
 
   return (
-    <section id="gallery" className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="other" className="py-20 px-4 sm:px-6 lg:px-8">
+      <CardHoverOverlays />
       <div className="max-w-7xl mx-auto">
         <div className="bg-card border border-border rounded-xl p-8 lg:p-12 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-1 bg-primary"></div>
-            <h2>3D Gallery</h2>
+            <h2>Other</h2>
           </div>
           <p className="text-muted-foreground mb-12 max-w-2xl">
-            My journey and progress learning Blender 3D modeling.
-            Here are some of my recent works and ongoing projects.
+            My journey and progress learning Blender 3D modeling. Here are some
+            of my recent works and ongoing projects.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

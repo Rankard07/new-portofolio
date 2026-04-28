@@ -212,17 +212,9 @@ export function Navbar({
         visualDuration: 0.4,
         bounce: 0.6,
       }}
-      className={cn(
-        "sticky top-0 z-50 bg-background/80 backdrop-blur-sm w-full",
-        className,
-      )}
+      className={cn("sticky top-0 z-50 w-full", className)}
     >
-      <nav
-        className={cn(
-          "sticky top-0 z-50 bg-background/80 backdrop-blur-sm w-full",
-          className,
-        )}
-      >
+      <nav>
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
             {/* Logo Section - Left */}
@@ -233,31 +225,61 @@ export function Navbar({
 
             {/* Center Navigation - Desktop: Pill Toggle, Mobile: Dropdown */}
             <div className="flex flex-1 justify-center items-center">
-              {/* Desktop Pill Toggle */}
+              {/* Desktop Pill Toggle with Sliding Animation */}
               <div className="hidden md:flex items-center gap-0 bg-muted/50 rounded-full p-1 border border-border/50 relative">
                 {PAGES.map((page) => (
                   <button
                     key={page.id}
                     onClick={() => onPageChange?.(page.id)}
                     className={cn(
-                      "relative px-5 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
+                      "relative px-5 py-1.5 rounded-full text-sm font-medium transition-colors duration-200",
                       activePage === page.id
-                        ? "bg-muted text-muted-foreground animate-pulse"
-                        : "",
+                        ? "bg-muted-foreground text-background animate-pulse"
+                        : "text-foreground hover:text-foreground/80",
                     )}
                   >
+                    {/* Sliding Background Pill */}
+                    {activePage === page.id && (
+                      <motion.div
+                        layoutId="activePill"
+                        className="absolute inset-0 bg-muted-foreground rounded-full"
+                        transition={{
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 30,
+                          bounce: 0,
+                        }}
+                      />
+                    )}
+
                     {/* --- EFEK SINAR (Hanya muncul jika aktif) --- */}
                     {activePage === page.id && (
                       <>
                         {/* Sinar Inti - Sangat Terang */}
-                        <span className="absolute animate-pulse top-0 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-foreground dark:bg-white rounded-full shadow-[0_0_8px_2px_rgba(0,0,0,0.5),0_0_15px_5px_rgba(0,0,0,0.2)] dark:shadow-[0_0_8px_2px_rgba(255,255,255,0.9),0_0_15px_5px_rgba(255,255,255,0.4)] z-10" />
+                        <motion.span
+                          layoutId="glowCore"
+                          className="absolute animate-pulse top-0 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-foreground dark:bg-white rounded-full shadow-[0_0_8px_2px_rgba(0,0,0,0.5),0_0_15px_5px_rgba(0,0,0,0.2)] dark:shadow-[0_0_8px_2px_rgba(255,255,255,0.9),0_0_15px_5px_rgba(255,255,255,0.4)] z-10"
+                          transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 30,
+                          }}
+                        />
 
                         {/* Pendaran Atmosfer (Aura) - Lebih Luas */}
-                        <span className="absolute animate-pulse top-0 left-1/2 -translate-x-1/2 w-16 h-1.5 bg-foreground/30 dark:bg-white/40 blur-md rounded-full opacity-80" />
+                        <motion.span
+                          layoutId="glowAura"
+                          className="absolute animate-pulse top-0 left-1/2 -translate-x-1/2 w-16 h-1.5 bg-foreground/30 dark:bg-white/40 blur-md rounded-full opacity-80"
+                          transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 30,
+                          }}
+                        />
                       </>
                     )}
 
-                    {page.label}
+                    <span className="relative z-10">{page.label}</span>
                   </button>
                 ))}
               </div>

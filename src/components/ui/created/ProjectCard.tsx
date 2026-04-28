@@ -28,10 +28,13 @@ export function ProjectCard({
   moreImages,
 }: ProjectCardProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<
+    string | null
+  >(null);
 
   return (
     <div className="bg-card rounded-lg overflow-hidden border border-border hover:shadow-lg transition-shadow">
+      {/*  */}
       <div className="aspect-video bg-muted relative overflow-hidden">
         {showcaseImage ? (
           <img
@@ -45,9 +48,13 @@ export function ProjectCard({
           </div>
         )}
       </div>
+
+      {/*  */}
       <div className="p-6">
         <h3 className="mb-2">{title}</h3>
-        <p className="text-muted-foreground mb-4">{description}</p>
+        <p className="text-muted-foreground mb-4">
+          {description}
+        </p>
         <div className="flex flex-wrap gap-2 mb-4">
           {technologies.map((tech, index) => (
             <span
@@ -98,8 +105,10 @@ export function ProjectCard({
         </div>
       </div>
 
+      {/*  */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-4xl w-full max-h-[95vh] overflow-y-auto">
+          {/*  */}
           <DialogHeader>
             <DialogTitle>{title} - Gallery</DialogTitle>
           </DialogHeader>
@@ -121,6 +130,7 @@ export function ProjectCard({
         </DialogContent>
       </Dialog>
 
+      {/*  */}
       <Dialog
         open={!!selectedImage}
         onOpenChange={() => setSelectedImage(null)}

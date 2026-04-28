@@ -37,8 +37,10 @@ export function ProjectsSection() {
         "TailwindCSS",
         "Shadcn/ui",
       ],
-      liveLink: "https://rankard07.github.io/landing-page-koemau/#",
-      githubLink: "https://github.com/Rankard07/landing-page-koemau",
+      liveLink:
+        "https://rankard07.github.io/landing-page-koemau/#",
+      githubLink:
+        "https://github.com/Rankard07/landing-page-koemau",
       showcaseImage: "/img/landing-page/Landing-page.1.png",
       moreImages: [
         "/img/landing-page/Landing-page.2.png",
@@ -56,8 +58,10 @@ export function ProjectsSection() {
         "A library management system with book inventory and borrowing tracking.",
       technologies: ["HTML", "CSS", "PHP"],
       liveLink: "#",
-      githubLink: "https://github.com/Rankard07/haltev-exam2-perpustakaan",
-      showcaseImage: "/img/exam2-perpustakaan/exam2-perpustakaan.1.png",
+      githubLink:
+        "https://github.com/Rankard07/haltev-exam2-perpustakaan",
+      showcaseImage:
+        "/img/exam2-perpustakaan/exam2-perpustakaan.1.png",
       moreImages: [
         "/img/exam2-perpustakaan/exam2-perpustakaan.2.png",
         "/img/exam2-perpustakaan/exam2-perpustakaan.3.png",
@@ -67,7 +71,8 @@ export function ProjectsSection() {
     },
     {
       title: "Old POS Koemau - Deprecated",
-      description: "A deprecated POS system for a my mother frozen food.",
+      description:
+        "A deprecated POS system for a my mother frozen food.",
       technologies: [
         "Laravel",
         "PHP",
@@ -88,18 +93,22 @@ export function ProjectsSection() {
   ];
 
   return (
-    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8">
+    <section
+      id="projects"
+      className="py-20 px-4 sm:px-6 lg:px-8"
+    >
       <CardHoverOverlays />
       <div className="max-w-7xl mx-auto">
-        <div className="bg-card border border-border rounded-xl p-8 lg:p-12 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10">
+        <div className="group relative bg-card border border-border rounded-xl p-8 lg:p-12 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-1 bg-primary"></div>
             <h2>Featured Projects</h2>
           </div>
           <p className="text-muted-foreground mb-12 max-w-2xl">
-            Here are some projects I've built during my bootcamp and personal
-            learning journey. Each one taught me valuable lessons about
-            development and design.
+            Here are some projects I've built during my
+            bootcamp and personal learning journey. Each one
+            taught me valuable lessons about development and
+            design.
           </p>
           <div className="grid md:grid-cols-2 gap-8">
             {projects.map((project, index) => (

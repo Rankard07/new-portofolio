@@ -11,7 +11,7 @@ export interface PageConfig {
 export const PAGES: PageConfig[] = [
   { id: "home", label: "Home" },
   { id: "project", label: "Project" },
-  { id: "gallery", label: "Gallery" },
+  { id: "other", label: "Other" },
   // Add more pages here, e.g.:
   // { id: "blog", label: "Blog" },
 ];
