@@ -33,6 +33,7 @@ import { motion } from "motion/react";
 // import { PulsatingButton } from "@/components/ui/pulsating-button";
 // import { ShineBorder } from "../shine-border";g
 import { Button } from "../button";
+import { ConicBorderWrapper } from "../conic-border-wrapper";
 
 // ============================================
 // INTERFACES (Type Definitions)
@@ -125,11 +126,16 @@ function CVDownload() {
     // "
     // >
     // <ShineBorder
-    //   shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+    //   shineColor={["#361195", "#8B5CF6", "#F59E0B"]}
     //   duration={7}
     //   borderWidth={3}
     // />
-    <div className="btn-conic-border btn-conic-border-fast">
+    // <div className="btn-conic-border btn-conic-border-fast">
+    <ConicBorderWrapper
+      speed="normal"
+      colors={["#361195", "#8B5CF6", "#F59E0B"]}
+      darkColors={["#4F46E5", "#A78BFA", "#FBBF24"]}
+    >
       <Button
         className="
           border-4 border-double border-muted
@@ -152,7 +158,8 @@ function CVDownload() {
         <FileText size={18} />
         Download CV
       </Button>
-    </div>
+    </ConicBorderWrapper>
+    // </div>
     // </div>
   );
 }

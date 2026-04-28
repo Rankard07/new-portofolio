@@ -406,10 +406,10 @@
   padding: 2px;
   background: conic-gradient(
     from var(--border-angle),
-    #a855f7,
-    #ec4899,
-    #f97316,
-    #a855f7
+    var(--conic-color-1, #a855f7),
+    var(--conic-color-2, #ec4899),
+    var(--conic-color-3, #f97316),
+    var(--conic-color-1, #a855f7)
   );
   animation: border-rotate 1s linear infinite;
 }
@@ -422,10 +422,10 @@
 .dark .btn-conic-border {
   background: conic-gradient(
     from var(--border-angle),
-    #c084fc,
-    #f472b6,
-    #fb923c,
-    #c084fc
+    var(--conic-dark-1, #c084fc),
+    var(--conic-dark-2, #f472b6),
+    var(--conic-dark-3, #fb923c),
+    var(--conic-dark-1, #c084fc)
   );
 }
 
