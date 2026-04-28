@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Code2, Mail, ExternalLink, ChevronDown } from "lucide-react";
+import {
+  Code2,
+  Mail,
+  ExternalLink,
+  ChevronDown,
+  FileText,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MobileHamburger } from "./MobileHamburger";
 // import ThemeModeToggle from "./ModeToggle";
@@ -18,9 +24,15 @@ import {
 } from "@/components/ui/navigation-menu";
 import { ListItem } from "@/components/ui/created/ListItem";
 import { FaLinkedinIn } from "react-icons/fa";
-import { PAGES, DEFAULT_CONTACT_ITEMS } from "./navbar-config";
+import {
+  PAGES,
+  DEFAULT_CONTACT_ITEMS,
+} from "./navbar-config";
 import { AnimatedThemeToggler } from "../animated-theme-toggler";
 import { motion } from "motion/react";
+// import { PulsatingButton } from "@/components/ui/pulsating-button";
+// import { ShineBorder } from "../shine-border";g
+import { Button } from "../button";
 
 // ============================================
 // INTERFACES (Type Definitions)
@@ -49,7 +61,10 @@ const DEFAULT_LOGO: NavbarLogo = {
 };
 
 // Icon mapping for desktop Contact dropdown
-const DESKTOP_CONTACT_ICONS: Record<string, React.ReactNode> = {
+const DESKTOP_CONTACT_ICONS: Record<
+  string,
+  React.ReactNode
+> = {
   Email: <Mail size={16} />,
   LinkedIn: <FaLinkedinIn size={16} />,
   GitHub: <ExternalLink size={16} />,
@@ -65,25 +80,80 @@ function ContactDropdown() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Contact</NavigationMenuTrigger>
+            <NavigationMenuTrigger>
+              Contact
+            </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150">
-                {DEFAULT_CONTACT_ITEMS.map((item, index) => (
-                  <ListItem key={index} href={item.href}>
-                    <a className="flex items-center gap-2">
-                      {DESKTOP_CONTACT_ICONS[item.label] ?? (
-                        <ExternalLink size={16} />
-                      )}
-                      {item.label}
-                    </a>
-                  </ListItem>
-                ))}
+                {DEFAULT_CONTACT_ITEMS.map(
+                  (item, index) => (
+                    <ListItem key={index} href={item.href}>
+                      <a className="flex items-center gap-2">
+                        {DESKTOP_CONTACT_ICONS[
+                          item.label
+                        ] ?? <ExternalLink size={16} />}
+                        {item.label}
+                      </a>
+                    </ListItem>
+                  ),
+                )}
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
     </div>
+  );
+}
+
+// ============================================
+// SUB-COMPONENT: CV Download
+// ============================================
+
+function CVDownload() {
+  return (
+    // <div
+    //   className="relative inline-block rounded-full
+    //   hover:scale-105
+    //   active:scale-95
+    //   transition-all
+    //   duration-300
+    //   hover:bg-gradient-to-r
+    //   hover:from-violet-600
+    //   hover:via-fuchsia-600
+    //   hover:to-pink-600
+    // "
+    // >
+    // <ShineBorder
+    //   shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+    //   duration={7}
+    //   borderWidth={3}
+    // />
+    <div className="btn-conic-border btn-conic-border-fast">
+      <Button
+        className="
+          border-4 border-double border-muted
+          bg-linear-to-r 
+          from-violet-600 via-fuchsia-600 to-pink-600 
+          hover:from-violet-900 hover:via-fuchsia-900 hover:to-pink-900 
+          dark:from-purple-900 dark:via-fuchsia-900 dark:to-pink-900 
+          dark:hover:from-purple-700 dark:hover:via-fuchsia-700 dark:hover:to-pink-700
+          text-white font-semibold text-sm
+          px-5 py-2.5 rounded-full gap-2  
+          transition duration-300
+          dark:hover:shadow-[0_0_40px_rgba(160,124,254,1),0_0_120px_rgba(254,143,181,0.4)]
+          hover:shadow-[0_0_40px_rgba(160,124,254,1),0_0_120px_rgba(254,143,181,0.4)]
+          "
+        onClick={() => {
+          // TODO: Ganti dengan path CV yang sesungguhnya
+          window.open("/cv.pdf", "_blank");
+        }}
+      >
+        <FileText size={18} />
+        Download CV
+      </Button>
+    </div>
+    // </div>
   );
 }
 
@@ -99,7 +169,8 @@ function MobilePageDropdown({
   onPageChange?: (page: string) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const activeLabel = PAGES.find((p) => p.id === activePage)?.label ?? "Menu";
+  const activeLabel =
+    PAGES.find((p) => p.id === activePage)?.label ?? "Menu";
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -113,7 +184,10 @@ function MobilePageDropdown({
           )}
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="center" className="min-w-35">
+      <DropdownMenuContent
+        align="center"
+        className="min-w-35"
+      >
         {PAGES.map((page) => (
           <DropdownMenuItem
             key={page.id}
@@ -133,62 +207,6 @@ function MobilePageDropdown({
     </DropdownMenu>
   );
 }
-
-/* function ContactDropdown() {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  return (
-    <div className="relative" ref={ref}>
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-1 px-3 py-1.5 rounded-md text-sm font-medium text-foreground hover:bg-accent transition-colors"
-      >
-        Contact
-        <ChevronDown
-          size={14}
-          className={cn("transition-transform", open && "rotate-180")}
-        />
-      </button>
-      {open && (
-        <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-lg z-50 py-1 animate-in fade-in zoom-in-95 duration-100">
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent transition-colors"
-          >
-            <ExternalLink size={16} /> LinkedIn
-          </a>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent transition-colors"
-          >
-            <ExternalLink size={16} /> GitHub
-          </a>
-          <a
-            href="mailto:email@example.com"
-            className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent transition-colors"
-          >
-            <Mail size={16} /> Email
-          </a>
-        </div>
-      )}
-    </div>
-  );
-} */
 
 // ============================================
 // MAIN COMPONENT
@@ -218,9 +236,16 @@ export function Navbar({
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
             {/* Logo Section - Left */}
-            <div className={cn("flex items-center gap-2", logo.className)}>
+            <div
+              className={cn(
+                "flex items-center gap-2",
+                logo.className,
+              )}
+            >
               {logo.icon}
-              <span className="font-medium">{logo.title}</span>
+              <span className="font-medium">
+                {logo.title}
+              </span>
             </div>
 
             {/* Center Navigation - Desktop: Pill Toggle, Mobile: Dropdown */}
@@ -279,22 +304,26 @@ export function Navbar({
                       </>
                     )}
 
-                    <span className="relative z-10">{page.label}</span>
+                    <span className="relative z-10">
+                      {page.label}
+                    </span>
                   </button>
                 ))}
               </div>
 
               {/* Mobile Page Dropdown - Center */}
-              <div className="md:hidden">
+              <div className="flex items-center gap-2 md:hidden">
                 <MobilePageDropdown
                   activePage={activePage}
                   onPageChange={onPageChange}
                 />
+                <CVDownload />
               </div>
             </div>
 
             {/* Right Navigation - Desktop: Contact Dropdown + Theme Toggle */}
             <div className="hidden md:flex items-center gap-3">
+              <CVDownload />
               <ContactDropdown />
               {/* <ThemeModeToggle /> */}
               <AnimatedThemeToggler />
