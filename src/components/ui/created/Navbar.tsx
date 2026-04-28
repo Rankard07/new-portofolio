@@ -33,7 +33,7 @@ import { motion } from "motion/react";
 // import { PulsatingButton } from "@/components/ui/pulsating-button";
 // import { ShineBorder } from "../shine-border";g
 import { Button } from "../button";
-import { ConicBorderWrapper } from "../conic-border-wrapper";
+import { ConicBorderWrapper } from "@/components/ui/created/ConicBorderWrapper";
 
 // ============================================
 // INTERFACES (Type Definitions)
