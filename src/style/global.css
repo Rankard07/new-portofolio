@@ -439,3 +439,60 @@
 
 /* Conic Gradient Border Animation - END */
 /*-----------------------------------------------*/
+
+/*-----------------------------------------------*/
+/* Linear Gradient Border Animation - START */
+@property --linear-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes linear-rotate {
+  from {
+    --linear-angle: 0deg;
+  }
+  to {
+    --linear-angle: 360deg;
+  }
+}
+
+.btn-linear-border {
+  position: relative;
+  border-radius: 9999px;
+  padding: 2px;
+  background: linear-gradient(
+    var(--linear-angle),
+    transparent 20%,
+    var(--linear-color-1, #00ca4e),
+    var(--linear-color-2, #ffbd44),
+    transparent 80%
+  );
+  animation: linear-rotate 3s linear infinite;
+}
+
+.btn-linear-border > * {
+  display: flex;
+  border-radius: 9999px;
+}
+
+.dark .btn-linear-border {
+  background: linear-gradient(
+    var(--linear-angle),
+    transparent 20%,
+    var(--linear-dark-1, #00ca4e),
+    var(--linear-dark-2, #ffbd44),
+    transparent 80%
+  );
+}
+
+.btn-linear-border-fast {
+  animation-duration: 1.5s;
+}
+
+.btn-linear-border-slow {
+  animation-duration: 5s;
+}
+
+/* Linear Gradient Border Animation - END */
+/*-----------------------------------------------*/
