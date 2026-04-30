@@ -10,8 +10,8 @@ interface LinearBorderWrapperProps {
 
 export function LinearBorderWrapper({
   children,
-  colors = ["#00ca4e", "#ffbd44"],
-  darkColors = ["#00ca4e", "#ffbd44"],
+  colors = ["#0080ff", "#0048ff"],
+  darkColors = ["#00eaff", "#00a2ff"],
   className,
   speed = "normal",
 }: LinearBorderWrapperProps) {

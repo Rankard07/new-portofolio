@@ -406,12 +406,13 @@
   padding: 2px;
   background: conic-gradient(
     from var(--border-angle),
-    var(--conic-color-1, #a855f7),
-    var(--conic-color-2, #ec4899),
-    var(--conic-color-3, #f97316),
-    var(--conic-color-1, #a855f7)
+    var(--conic-color-1),
+    var(--conic-color-2),
+    var(--conic-color-3),
+    var(--conic-color-1)
   );
-  animation: border-rotate 1s linear infinite;
+  animation: border-rotate 2s linear infinite;
+  animation-play-state: paused;
 }
 
 .btn-conic-border > * {
@@ -422,10 +423,10 @@
 .dark .btn-conic-border {
   background: conic-gradient(
     from var(--border-angle),
-    var(--conic-dark-1, #c084fc),
-    var(--conic-dark-2, #f472b6),
-    var(--conic-dark-3, #fb923c),
-    var(--conic-dark-1, #c084fc)
+    var(--conic-dark-1),
+    var(--conic-dark-2),
+    var(--conic-dark-3),
+    var(--conic-dark-1)
   );
 }
 
@@ -435,6 +436,13 @@
 
 .btn-conic-border-slow {
   animation-duration: 5s;
+}
+
+.btn-conic-border:hover,
+.btn-conic-border:focus-visible,
+.dark .btn-conic-border:hover,
+.dark .btn-conic-border:focus-visible {
+  animation-play-state: running;
 }
 
 /* Conic Gradient Border Animation - END */
@@ -448,19 +456,88 @@
   inherits: false;
 }
 
-@keyframes linear-rotate {
+/* @keyframes linear-rotate {
   from {
     --linear-angle: 0deg;
   }
   to {
     --linear-angle: 360deg;
   }
+} */
+
+@keyframes linear-rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 .btn-linear-border {
   position: relative;
+  overflow: hidden;
+  padding: 3px; /* Ketebalan border */
   border-radius: 9999px;
-  padding: 2px;
+  display: inline-flex;
+  isolation: isolate;
+  background: #0f172a; /* Background dark untuk fill tengah */
+}
+
+.btn-linear-border > * {
+  background: inherit; /* Button mengikuti background */
+}
+
+.btn-linear-border::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Ukuran dibuat sangat besar (400%) agar saat berputar, 
+     sudut-sudut gradient tetap menutupi seluruh area persegi panjang */
+  /* width: calc(101% + 2px);
+  height: calc(101% + 2px); */
+  width: 400px;
+  height: 400px;
+  transform: translate(-50%, -50%);
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--linear-angle),
+    transparent 0deg,
+    var(--linear-color-1, #00eaff) 30deg,
+    var(--linear-color-2, #00a2ff) 60deg,
+    transparent 90deg,
+    transparent 180deg,
+    var(--linear-color-1, #00eaff) 210deg,
+    var(--linear-color-2, #00a2ff) 240deg,
+    transparent 270deg,
+    transparent 360deg
+  );
+  animation: linear-rotate 4s linear infinite;
+  animation-play-state: paused;
+  z-index: -1;
+}
+
+.dark .btn-linear-border::before {
+  background: conic-gradient(
+    from var(--linear-angle),
+    transparent 0deg,
+    var(--linear-dark-1, #00eaff) 30deg,
+    var(--linear-dark-2, #00a2ff) 60deg,
+    transparent 90deg,
+    transparent 180deg,
+    var(--linear-dark-1, #00eaff) 210deg,
+    var(--linear-dark-2, #00a2ff) 240deg,
+    transparent 270deg,
+    transparent 360deg
+  );
+}
+
+/* .btn-linear-border {
+  position: relative;
+  border-radius: 9999px;
+  overflow: hidden;
+  padding: 3px;
   background: linear-gradient(
     var(--linear-angle),
     transparent 20%,
@@ -471,11 +548,6 @@
   animation: linear-rotate 3s linear infinite;
 }
 
-.btn-linear-border > * {
-  display: flex;
-  border-radius: 9999px;
-}
-
 .dark .btn-linear-border {
   background: linear-gradient(
     var(--linear-angle),
@@ -484,7 +556,7 @@
     var(--linear-dark-2, #ffbd44),
     transparent 80%
   );
-}
+} */
 
 .btn-linear-border-fast {
   animation-duration: 1.5s;
@@ -492,6 +564,17 @@
 
 .btn-linear-border-slow {
   animation-duration: 5s;
+}
+
+.btn-linear-border > * {
+  display: flex;
+  border-radius: 9999px;
+}
+
+.btn-linear-border:hover::before,
+.btn-linear-border:focus-visible::before,
+.dark .btn-linear-border:hover::before {
+  animation-play-state: running;
 }
 
 /* Linear Gradient Border Animation - END */

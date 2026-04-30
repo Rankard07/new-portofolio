@@ -34,7 +34,8 @@ import { motion } from "motion/react";
 // import { ShineBorder } from "../shine-border";g
 import { Button } from "../button";
 // import { ConicBorderWrapper } from "@/components/ui/created/ConicBorderWrapper";
-import { LinearBorderWrapper } from "./LinearBorderWrapper";
+// import { LinearBorderWrapper } from "./LinearBorderWrapper";
+import { ConicBorderWrapper } from "./ConicBorderWrapper";
 
 // ============================================
 // INTERFACES (Type Definitions)
@@ -132,12 +133,8 @@ function CVDownload() {
     //   borderWidth={3}
     // />
     // <div className="btn-conic-border btn-conic-border-fast">
-    // <ConicBorderWrapper
-    //   speed="normal"
-    //   colors={["#361195", "#8B5CF6", "#F59E0B"]}
-    //   darkColors={["#4F46E5", "#A78BFA", "#FBBF24"]}
-    // >
-    <LinearBorderWrapper>
+    <ConicBorderWrapper>
+      {/* <LinearBorderWrapper> */}
       <Button
         className="
           border-4 border-double border-muted
@@ -148,7 +145,7 @@ function CVDownload() {
           dark:hover:from-purple-700 dark:hover:via-fuchsia-700 dark:hover:to-pink-700
           text-white font-semibold text-sm
           px-5 py-2.5 rounded-full gap-2  
-          transition duration-300
+          transition-all duration-300
           dark:hover:shadow-[0_0_40px_rgba(160,124,254,1),0_0_120px_rgba(254,143,181,0.4)]
           hover:shadow-[0_0_40px_rgba(160,124,254,1),0_0_120px_rgba(254,143,181,0.4)]
           "
@@ -160,8 +157,8 @@ function CVDownload() {
         <FileText size={18} />
         Download CV
       </Button>
-    </LinearBorderWrapper>
-    // </ConicBorderWrapper>
+      {/* </LinearBorderWrapper> */}
+    </ConicBorderWrapper>
     // </div>
     // </div>
   );
@@ -258,7 +255,7 @@ export function Navbar({
               </span>
             </div>
 
-            {/* Center Navigation - Desktop: Pill Toggle, Mobile: Dropdown */}
+            {/* START -Center Navigation - Desktop: Pill Toggle, Mobile: Dropdown */}
             <div className="flex flex-1 justify-center items-center">
               {/* Desktop Pill Toggle with Sliding Animation */}
               <div className="hidden md:flex items-center gap-0 bg-muted/50 rounded-full p-1 border border-border/50 relative">
@@ -298,6 +295,7 @@ export function Navbar({
                             type: "spring",
                             stiffness: 400,
                             damping: 30,
+                            bounce: 0,
                           }}
                         />
 
@@ -330,6 +328,7 @@ export function Navbar({
                 <CVDownload />
               </div>
             </div>
+            {/* END - Center Navigation */}
 
             {/* Right Navigation - Desktop: Contact Dropdown + Theme Toggle */}
             <div className="hidden md:flex items-center gap-3">

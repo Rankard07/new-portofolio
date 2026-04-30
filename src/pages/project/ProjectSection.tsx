@@ -1,5 +1,5 @@
 import { CardHoverOverlays } from "@/components/ui/created/CardHoverOverlays";
-import { ProjectCard } from "@/components/ui/created/ProjectCard";
+import { ProjectCard } from "@/pages/project/ProjectCard";
 
 export function ProjectsSection() {
   const projects = [
