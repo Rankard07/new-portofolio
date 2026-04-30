@@ -30,11 +30,8 @@ import {
 } from "./navbar-config";
 import { AnimatedThemeToggler } from "../animated-theme-toggler";
 import { motion } from "motion/react";
-// import { PulsatingButton } from "@/components/ui/pulsating-button";
-// import { ShineBorder } from "../shine-border";g
 import { Button } from "../button";
-// import { ConicBorderWrapper } from "@/components/ui/created/ConicBorderWrapper";
-// import { LinearBorderWrapper } from "./LinearBorderWrapper";
+import { GlowingAnimatedBG } from "./GlowingAnimatedBG";
 import { ConicBorderWrapper } from "./ConicBorderWrapper";
 
 // ============================================
@@ -115,52 +112,39 @@ function ContactDropdown() {
 
 function CVDownload() {
   return (
-    // <div
-    //   className="relative inline-block rounded-full
-    //   hover:scale-105
-    //   active:scale-95
-    //   transition-all
-    //   duration-300
-    //   hover:bg-gradient-to-r
-    //   hover:from-violet-600
-    //   hover:via-fuchsia-600
-    //   hover:to-pink-600
-    // "
-    // >
-    // <ShineBorder
-    //   shineColor={["#361195", "#8B5CF6", "#F59E0B"]}
-    //   duration={7}
-    //   borderWidth={3}
-    // />
-    // <div className="btn-conic-border btn-conic-border-fast">
-    <ConicBorderWrapper>
-      {/* <LinearBorderWrapper> */}
-      <Button
-        className="
+    <motion.div
+      initial={{ scale: 1 }}
+      whileHover={{ scale: 1.1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <GlowingAnimatedBG>
+        <ConicBorderWrapper>
+          <Button
+            className="
           border-4 border-double border-muted
           bg-linear-to-r 
-          from-violet-600 via-fuchsia-600 to-pink-600 
-          hover:from-violet-900 hover:via-fuchsia-900 hover:to-pink-900 
-          dark:from-purple-900 dark:via-fuchsia-900 dark:to-pink-900 
-          dark:hover:from-purple-700 dark:hover:via-fuchsia-700 dark:hover:to-pink-700
+          from-violet-600 via-fuchsia-600 o-pink-600 
+          hover:from-violet-900 hover:via-fuchsia-900 over:to-pink-900 
+          dark:from-purple-900 dark:via-fuchsia-900 ark:to-pink-900 
+          dark:hover:from-purple-700 dark:hover:via-fuchsia-700 ark:hover:to-pink-700
           text-white font-semibold text-sm
           px-5 py-2.5 rounded-full gap-2  
           transition-all duration-300
-          dark:hover:shadow-[0_0_40px_rgba(160,124,254,1),0_0_120px_rgba(254,143,181,0.4)]
-          hover:shadow-[0_0_40px_rgba(160,124,254,1),0_0_120px_rgba(254,143,181,0.4)]
+
+          // ark:hover:hadow-[0_0_40px_rgba(160,124,254,1),0_0_120px_rgba(254,143,181,0.4)]
+          // over:hadow-[0_0_40px_rgba(160,124,254,1),0_0_120px_rgba(254,143,181,0.4)]
           "
-        onClick={() => {
-          // TODO: Ganti dengan path CV yang sesungguhnya
-          window.open("/cv.pdf", "_blank");
-        }}
-      >
-        <FileText size={18} />
-        Download CV
-      </Button>
-      {/* </LinearBorderWrapper> */}
-    </ConicBorderWrapper>
-    // </div>
-    // </div>
+            onClick={() => {
+              // TODO: Ganti dengan path CV yang sesungguhnya
+              window.open("/cv.pdf", "_blank");
+            }}
+          >
+            <FileText size={18} />
+            Download CV
+          </Button>
+        </ConicBorderWrapper>
+      </GlowingAnimatedBG>
+    </motion.div>
   );
 }
 

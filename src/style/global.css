@@ -403,7 +403,7 @@
 .btn-conic-border {
   position: relative;
   border-radius: 9999px;
-  padding: 2px;
+  padding: 1px;
   background: conic-gradient(
     from var(--border-angle),
     var(--conic-color-1),
@@ -411,8 +411,8 @@
     var(--conic-color-3),
     var(--conic-color-1)
   );
-  animation: border-rotate 2s linear infinite;
-  animation-play-state: paused;
+  animation: border-rotate 4s linear infinite;
+  /* animation-play-state: paused; */
 }
 
 .btn-conic-border > * {
@@ -435,14 +435,14 @@
 }
 
 .btn-conic-border-slow {
-  animation-duration: 5s;
+  animation-duration: 6s;
 }
 
 .btn-conic-border:hover,
 .btn-conic-border:focus-visible,
 .dark .btn-conic-border:hover,
 .dark .btn-conic-border:focus-visible {
-  animation-play-state: running;
+  animation-duration: 1s;
 }
 
 /* Conic Gradient Border Animation - END */
@@ -579,3 +579,96 @@
 
 /* Linear Gradient Border Animation - END */
 /*-----------------------------------------------*/
+
+/*-----------------------------------------------*/
+/* Glowing Animated Background */
+
+/* @property --glow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes glow-rotate {
+  to {
+    --glow-angle: 360deg;
+  }
+} */
+
+@keyframes glow-movement {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.btn-glowing-bg {
+  position: relative;
+  border-radius: 9999px;
+  padding: 3px;
+  overflow: visible;
+  isolation: isolate;
+}
+
+.btn-glowing-bg::before {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    45deg,
+    var(--glow-color-1, #edd4b2),
+    var(--glow-color-2, #94b0da),
+    var(--glow-color-3, #5b4e77),
+    var(--glow-color-4, #593959),
+    var(--glow-color-5, #fcf0cc),
+    var(--glow-color-6, #237476),
+    var(--glow-color-1, #edd4b2)
+  );
+  background-size: 400% 100%;
+  filter: blur(30px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  /* animation: glow-rotate 4s linear infinite; */
+  animation: glow-movement 9s linear infinite;
+  animation-play-state: paused;
+  z-index: -1;
+}
+
+.btn-glowing-bg:hover::before {
+  opacity: 0.8;
+  animation-play-state: running;
+}
+
+.dark .btn-glowing-bg::before {
+  background: linear-gradient(
+    45deg,
+    var(--glow-dark-1, #f1dec4),
+    var(--glow-dark-2, #afc4e4),
+    var(--glow-dark-3, #8172a3),
+    var(--glow-dark-4, #915d91),
+    var(--glow-dark-5, #fdf3d7),
+    var(--glow-dark-6, #3a9a9d),
+    var(--glow-dark-1, #f1dec4)
+  );
+  background-size: 400% 100%;
+}
+
+.btn-glowing-bg-fast::before {
+  animation-duration: 2s;
+}
+
+.btn-glowing-bg-slow::before {
+  animation-duration: 12s;
+}
+
+.btn-glowing-bg > * {
+  position: relative;
+  z-index: 1;
+  border-radius: 9999px;
+}
