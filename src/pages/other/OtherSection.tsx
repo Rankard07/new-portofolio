@@ -1,31 +1,31 @@
-import { CardHoverOverlays } from "@/components/ui/created/CardHoverOverlays";
-import { Box, Camera, Layers } from "lucide-react";
+// import { Box } from "lucide-react";
 
 export function OtherSection() {
-  const blenderProjects = [
+  return (
+    <section
+      id="other-section"
+      className="py-20 px-4 sm:px-6 lg:px-8"
+    >
+      <div className="max-w-7xl mx-auto">
+        <h2>Other</h2>
+      </div>
+    </section>
+  );
+  /* const blenderProjects = [
     {
       title: "Character Modeling",
-      description: "Low-poly character model with rigging for game asset.",
+      description:
+        "Low-poly character model with rigging for game asset.",
       status: "In Progress",
       icon: <Box className="w-6 h-6" />,
-    },
-    {
-      title: "Architectural Visualization",
-      description: "Interior scene with realistic lighting and materials.",
-      status: "Completed",
-      icon: <Camera className="w-6 h-6" />,
-    },
-    {
-      title: "Product Rendering",
-      description: "3D product mockup with photorealistic shaders.",
-      status: "In Progress",
-      icon: <Layers className="w-6 h-6" />,
     },
   ];
 
   return (
-    <section id="other" className="py-20 px-4 sm:px-6 lg:px-8">
-      <CardHoverOverlays />
+    <section
+      id="other"
+      className="py-20 px-4 sm:px-6 lg:px-8"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="group relative bg-card border border-border rounded-xl p-8 lg:p-12 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10">
           <div className="flex items-center gap-3 mb-4">
@@ -33,8 +33,9 @@ export function OtherSection() {
             <h2>Other</h2>
           </div>
           <p className="text-muted-foreground mb-12 max-w-2xl">
-            My journey and progress learning Blender 3D modeling. Here are some
-            of my recent works and ongoing projects.
+            My journey and progress learning Blender 3D
+            modeling. Here are some of my recent works and
+            ongoing projects.
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -57,7 +58,9 @@ export function OtherSection() {
                     {project.status}
                   </span>
                 </div>
-                <h3 className="font-medium mb-2">{project.title}</h3>
+                <h3 className="font-medium mb-2">
+                  {project.title}
+                </h3>
                 <p className="text-sm text-muted-foreground">
                   {project.description}
                 </p>
@@ -72,5 +75,5 @@ export function OtherSection() {
         </div>
       </div>
     </section>
-  );
+  ); */
 }

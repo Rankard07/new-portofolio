@@ -1,4 +1,3 @@
-import { CardHoverOverlays } from "@/components/ui/created/CardHoverOverlays";
 import { ProjectCard } from "@/pages/project/ProjectCard";
 
 export function ProjectsSection() {
@@ -97,7 +96,6 @@ export function ProjectsSection() {
       id="projects"
       className="py-20 px-4 sm:px-6 lg:px-8"
     >
-      <CardHoverOverlays />
       <div className="max-w-7xl mx-auto">
         <div className="group relative bg-card border border-border rounded-xl p-8 lg:p-12 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10">
           <div className="flex items-center gap-3 mb-8">
