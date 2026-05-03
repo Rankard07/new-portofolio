@@ -68,6 +68,15 @@ export default function App() {
     // Scroll ke atas saat pertama kali load
     window.scrollTo(0, 0);
 
+    // Reset hash URL agar tidak stuck di #skills
+    if (window.location.hash) {
+      history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search,
+      );
+    }
+
     const timer = setTimeout(() => {
       setIsFirstLoad(false);
     }, 1000);
@@ -80,12 +89,14 @@ export default function App() {
       storageKey="vite-ui-theme"
     >
       <div className="min-h-screen bg-background">
-        {/* Navbar */}
-        <Navbar
-          activePage={page}
-          onPageChange={handlePageChange}
-          className="w-full"
-        />
+        {/* Navbar - Hidden on Other page */}
+        {page !== "other" && (
+          <Navbar
+            activePage={page}
+            onPageChange={handlePageChange}
+            className="w-full"
+          />
+        )}
 
         {/* Table of Contents - only on Home page */}
         {/* {page === "home" && <TableOfContents />} */}
@@ -135,16 +146,16 @@ export default function App() {
               )}
 
               {page === "other" && (
-                <div className="max-w-[70rem] mx-auto px-4 sm:px-6 lg:px-8">
-                  <OtherSection />
-                </div>
+                <OtherSection
+                  onBack={() => handlePageChange("home")}
+                />
               )}
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* Footer */}
-        <Footer />
+        {/* Footer - Hidden on Other page */}
+        {page !== "other" && <Footer />}
       </div>
     </ThemeProvider>
   );
