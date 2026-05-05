@@ -1,7 +1,91 @@
 /*-----------------------------------------------*/
-.square {
+/* BAGIAN CSS: Styling object utama & trail        */
+/*-----------------------------------------------*/
+
+/* ================================================ */
+/* .object = Elemen utama (garis bercahaya)         */
+/* ================================================ */
+.object {
+  /* position absolute = lepaskan dari flow normal,
+     diposisikan lewat top/left di dalam container */
+  position: absolute;
+  /* Posisikan di tengah container (atas 50%, kiri 50%) */
+  top: 50%;
+  left: 50%;
+  /* Lebar garis = 50 piksel */
   width: 50px;
-  height: 1px;
-  background-color: #686875;
-  border-radius: 15%;
+  /* Tinggi garis = 2 piksel (tipis) */
+  height: 2px;
+  /* margin-top: -1px = geser ke atas setengah tinggi
+     agar garis benar-benar di tengah secara vertikal */
+  margin-top: -1px;
+  /* margin-left: -25px = geser ke kiri setengah lebar
+     agar garis benar-benar di tengah secara horizontal */
+  margin-left: -25px;
+
+  /* ================================================ */
+  /* Background gradient: terang di tengah,           */
+  /* memudar ke transparan di kedua ujung               */
+  /* ================================================ */
+  background: linear-gradient(
+    90deg,
+    /* arah gradient: kiri ke kanan */ transparent 0%,
+    /* ujung kiri: transparan */ rgba(200, 200, 220, 0.8)
+      15%,
+    /* sedikit ke kanan: putih keabu-abuan */ #ffffff 50%,
+    /* tengah: putih murni */ rgba(200, 200, 220, 0.8) 85%,
+    /* sedikit ke kiri: putih keabu-abuan */ transparent
+      100% /* ujung kanan: transparan */
+  );
+  /* border-radius 50% = ujung membulat (pill shape) */
+  border-radius: 50%;
+
+  /* ================================================ */
+  /* Box-shadow berlapis = efek glow / cahaya          */
+  /* Semakin ke lapisan luar, semakin besar & redup    */
+  /* ================================================ */
+  box-shadow:
+    /* Lapisan 1 (terdalam): glow kecil & padat */
+    0 0 4px 1px rgba(160, 160, 200, 0.9),
+    /* Lapisan 2: glow sedang */ 0 0 10px 3px
+      rgba(140, 140, 200, 0.6),
+    /* Lapisan 3: glow besar & redup */ 0 0 20px 6px
+      rgba(120, 120, 200, 0.4),
+    /* Lapisan 4 (terluar): glow sangat besar & samar */ 0 0
+      40px 12px rgba(100, 100, 200, 0.2);
+
+  /* z-index: 10 = taruh di ATAS trail particles */
+  z-index: 10;
+}
+
+/* ================================================ */
+/* .trail-particle = Elemen jejak (12 elemen)        */
+/* ================================================ */
+.trail-particle {
+  /* Sama: absolute, posisi dari container */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Tinggi sama dengan object utama (2px) */
+  height: 2px;
+  /* Centering vertikal */
+  margin-top: -1px;
+  /* Ujung membulat */
+  border-radius: 50%;
+
+  /* Gradient lebih redup dari object utama */
+  background: linear-gradient(
+    90deg,
+    transparent,
+    /* ujung kiri transparan */ rgba(180, 180, 210, 0.6),
+    /* tengah: abu kebiruan */ transparent
+      /* ujung kanan transparan */
+  );
+
+  /* Glow tipis & redup */
+  box-shadow: 0 0 6px 2px rgba(140, 140, 200, 0.25);
+
+  /* pointer-events: none = trail tidak mengganggu klik/tap */
+  /* (meski transparan, tetap mencegah event mouse masuk) */
+  pointer-events: none;
 }
