@@ -1,0 +1,7 @@
+/*-----------------------------------------------*/
+.square {
+  width: 50px;
+  height: 1px;
+  background-color: #686875;
+  border-radius: 15%;
+}

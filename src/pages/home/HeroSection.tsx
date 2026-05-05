@@ -16,22 +16,30 @@ export function HeroSection() {
             <div className="flex-1 text-center lg:text-left">
               {/* Badge - Start */}
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent rounded-full mb-6">
-                <Sparkles size={16} className="text-primary" />
-                <span className="text-sm">Available for opportunities</span>
+                <Sparkles
+                  size={16}
+                  className="text-primary"
+                />
+                <span className="text-sm">
+                  Available for opportunities
+                </span>
               </div>
               {/* Badge - End */}
 
               {/* Title - Start */}
               <h1 className="text-5xl lg:text-6xl mb-6">
                 Front-End Developer &<br />
-                <span className="text-primary">UI/UX Designer</span>
+                <span className="text-primary">
+                  UI/UX Designer
+                </span>
               </h1>
               {/* Title - End */}
 
               {/* Description - Start */}
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl">
-                Fresh bootcamp graduate passionate about creating beautiful,
-                user-centered web experiences. I transform designs into
+                Fresh bootcamp graduate passionate about
+                creating beautiful, user-centered web
+                experiences. I transform designs into
                 pixel-perfect, responsive interfaces.
               </p>
               {/* Description - End */}

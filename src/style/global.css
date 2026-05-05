@@ -581,7 +581,7 @@
 /*-----------------------------------------------*/
 
 /*-----------------------------------------------*/
-/* Glowing Animated Background */
+/* Glowing Animated Background - START */
 
 /* @property --glow-angle {
   syntax: "<angle>";
@@ -672,3 +672,6 @@
   z-index: 1;
   border-radius: 9999px;
 }
+
+/* Glowing Animated Background - END */
+/*-----------------------------------------------*/

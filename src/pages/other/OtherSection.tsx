@@ -1,79 +1,119 @@
-// import { Box } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { animate } from "animejs";
+import { ArrowLeft } from "lucide-react";
 
-export function OtherSection() {
+interface OtherSectionProps {
+  onBack?: () => void;
+}
+
+export function OtherSection({
+  onBack,
+}: OtherSectionProps) {
+  const squareRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!squareRef.current) return;
+
+    /* Gerakan melingkar (radius sama untuk x dan y)
+    const radius = 100;
+    const state = { angle: 0 };
+
+    const animation = animate(state, {
+      angle: 360,
+      duration: 3000,
+      loop: true,
+      ease: "linear",
+      onLoop: () => console.log("Loop"),
+      onBegin: () => console.log("Begin"),
+      onUpdate: () => {
+        if (!squareRef.current) return;
+        const rad = (state.angle * Math.PI) / 180;
+        const x = Math.cos(rad) * radius;
+        const y = Math.sin(rad) * radius;
+        squareRef.current.style.transform = `translate(${x}px, ${y}px)`;
+      },
+    });
+    */
+
+    /* Gerakan oval (radius x > radius y)
+    const radiusX = 270;
+    const radiusY = 90;
+    const state = { angle: 0 };
+
+    const animation = animate(state, {
+      angle: 360,
+      duration: 4000,
+      loop: true,
+      ease: "linear",
+      onUpdate: () => {
+        if (!squareRef.current) return;
+        const rad = (state.angle * Math.PI) / 180;
+        const x = Math.cos(rad) * radiusX;
+        const y = Math.sin(rad) * radiusY;
+        squareRef.current.style.transform = `translate(${x}px, ${y}px)`;
+      },
+    });
+    */
+
+    // Gerakan oval miring
+    const radiusX = 270; // horizontal panjang
+    const radiusY = 270; // vertikal pendek
+    const tiltDeg = 0; // sudut miring oval dalam derajat
+    const state = { angle: 0 };
+
+    const animation = animate(state, {
+      angle: 360,
+      duration: 4000,
+      loop: true,
+      ease: "linear",
+      onLoop: () => console.log("Loop"),
+      onBegin: () => console.log("Begin"),
+      onUpdate: () => {
+        if (!squareRef.current) return;
+        const rad = (state.angle * Math.PI) / 180;
+        const tilt = (tiltDeg * Math.PI) / 180;
+
+        // Koordinat oval sebelum dimiringkan
+        const xOval = Math.cos(rad) * radiusX;
+        const yOval = Math.sin(rad) * radiusY;
+
+        // Rotasi koordinat agar oval jadi miring
+        const x =
+          xOval * Math.cos(tilt) - yOval * Math.sin(tilt);
+        const y =
+          xOval * Math.sin(tilt) + yOval * Math.cos(tilt);
+
+        squareRef.current.style.transform = `translate(${x}px, ${y}px)`;
+      },
+    });
+
+    return () => {
+      animation.pause();
+    };
+  }, []);
+
   return (
-    <section
-      id="other-section"
-      className="py-20 px-4 sm:px-6 lg:px-8"
-    >
-      <div className="max-w-7xl mx-auto">
-        <h2>Other</h2>
+    <section className="min-h-screen">
+      {/* Custom Navbar for Other page */}
+      <nav className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-sm border-b border-border">
+        <div className="flex items-center h-16 px-4">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 hover:bg-muted transition-colors"
+          >
+            <ArrowLeft size={18} />
+            <span>Back</span>
+          </button>
+          <span className="ml-4 font-medium">
+            Other Works
+          </span>
+        </div>
+      </nav>
+
+      {/* Content */}
+      <div className="p-8 flex justify-center items-center pt-36">
+        <div ref={squareRef} className="square"></div>
       </div>
     </section>
   );
-  /* const blenderProjects = [
-    {
-      title: "Character Modeling",
-      description:
-        "Low-poly character model with rigging for game asset.",
-      status: "In Progress",
-      icon: <Box className="w-6 h-6" />,
-    },
-  ];
-
-  return (
-    <section
-      id="other"
-      className="py-20 px-4 sm:px-6 lg:px-8"
-    >
-      <div className="max-w-7xl mx-auto">
-        <div className="group relative bg-card border border-border rounded-xl p-8 lg:p-12 transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-1 bg-primary"></div>
-            <h2>Other</h2>
-          </div>
-          <p className="text-muted-foreground mb-12 max-w-2xl">
-            My journey and progress learning Blender 3D
-            modeling. Here are some of my recent works and
-            ongoing projects.
-          </p>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blenderProjects.map((project, index) => (
-              <div
-                key={index}
-                className="border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 group"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 bg-primary/10 rounded-lg text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    {project.icon}
-                  </div>
-                  <span
-                    className={`text-xs font-medium px-2 py-1 rounded-full ${
-                      project.status === "Completed"
-                        ? "bg-green-500/10 text-green-500"
-                        : "bg-yellow-500/10 text-yellow-500"
-                    }`}
-                  >
-                    {project.status}
-                  </span>
-                </div>
-                <h3 className="font-medium mb-2">
-                  {project.title}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {project.description}
-                </p>
-                <div className="mt-4 aspect-video bg-muted rounded-lg border border-border/50 flex items-center justify-center">
-                  <span className="text-muted-foreground text-sm">
-                    3D Preview Coming Soon
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  ); */
 }
