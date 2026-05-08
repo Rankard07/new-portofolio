@@ -3,6 +3,181 @@
 /*-----------------------------------------------*/
 
 /* ================================================ */
+/* .glow-sphere = Glowing sphere particles          */
+/* ================================================ */
+.glow-sphere {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.glow-sphere-warm {
+  background: radial-gradient(
+    circle at 30% 30%,
+    #ffcc88 0%,
+    #ff6622 50%,
+    #cc3300 100%
+  );
+  box-shadow:
+    0 0 6px 2px rgba(255, 100, 50, 0.9),
+    0 0 14px 4px rgba(255, 80, 30, 0.7),
+    0 0 28px 8px rgba(255, 60, 20, 0.45);
+}
+
+.glow-sphere-cool {
+  background: radial-gradient(
+    circle at 30% 30%,
+    #88ddff 0%,
+    #2266ff 50%,
+    #0033aa 100%
+  );
+  box-shadow:
+    0 0 6px 2px rgba(50, 130, 255, 0.9),
+    0 0 14px 4px rgba(30, 100, 255, 0.7),
+    0 0 28px 8px rgba(20, 80, 255, 0.45);
+}
+
+.glow-sphere-random {
+  /* background: hsl(random(0, 360), 70%, 50%); */
+  box-shadow:
+    0 0 6px 2px rgba(255, 255, 255, 0.5),
+    0 0 14px 4px rgba(255, 255, 255, 0.3),
+    0 0 28px 8px rgba(255, 255, 255, 0.15);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 6px 2px rgba(255, 255, 255, 0.5),
+      0 0 14px 4px rgba(255, 255, 255, 0.3),
+      0 0 28px 8px rgba(255, 255, 255, 0.15);
+  }
+  50% {
+    box-shadow:
+      0 0 8px 2px rgba(255, 255, 255, 0.7),
+      0 0 18px 4px rgba(255, 255, 255, 0.4),
+      0 0 36px 8px rgba(255, 255, 255, 0.2);
+  }
+}
+
+.glow-sphere-o-type {
+}
+
+.glow-sphere-b-type {
+}
+
+.glow-sphere-a-type {
+}
+
+.glow-sphere-f-type {
+}
+
+.glow-sphere-g-type {
+}
+
+.glow-sphere-k-type {
+}
+
+.glow-sphere-m-type {
+}
+
+/* ================================================ */
+/* .black-hole-center = Pusat / placeholder        */
+/* ================================================ */
+.black-hole-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    #050508 30%,
+    #0a0a12 70%,
+    #11111a 100%
+  );
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 20px 4px rgba(100, 100, 220, 0.08),
+    0 0 50px 12px rgba(80, 80, 200, 0.04);
+  z-index: 5;
+}
+
+/* ================================================ */
+/* .black-hole-ring = Cincin putar di sekitar pusat */
+/* ================================================ */
+.black-hole-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid rgba(120, 120, 220, 0.15);
+  transform: translate(-50%, -50%);
+  animation: disk-rotate 20s linear infinite;
+  pointer-events: none;
+}
+
+.black-hole-ring::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  border-radius: 50%;
+  border: 1px solid rgba(120, 120, 220, 0.08);
+  animation: disk-rotate 35s linear infinite reverse;
+}
+
+.black-hole-ring::after {
+  content: "";
+  position: absolute;
+  inset: -90px;
+  border-radius: 50%;
+  border: 1px solid rgba(120, 120, 220, 0.05);
+  animation: disk-rotate 50s linear infinite;
+}
+
+@keyframes disk-rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* ================================================ */
+/* .black-hole-pulse = Efek pulse pada pusat       */
+/* ================================================ */
+.black-hole-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: bh-pulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes bh-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px 4px rgba(100, 100, 220, 0.06);
+  }
+  50% {
+    box-shadow: 0 0 30px 8px rgba(100, 100, 220, 0.12);
+  }
+}
+
+/* ================================================ */
 /* .object = Elemen utama (garis bercahaya)         */
 /* ================================================ */
 .object {
@@ -61,6 +236,7 @@
 /* ================================================ */
 /* .trail-particle = Elemen jejak (12 elemen)        */
 /* ================================================ */
+
 .trail-particle {
   /* Sama: absolute, posisi dari container */
   position: absolute;
@@ -88,4 +264,78 @@
   /* pointer-events: none = trail tidak mengganggu klik/tap */
   /* (meski transparan, tetap mencegah event mouse masuk) */
   pointer-events: none;
+}
+
+/*-----------------------------------------------*/
+/* BLACK HOLE EVENT HORIZON EFFECT               */
+/*-----------------------------------------------*/
+.black-hole-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px; /* Adjust size as needed */
+  height: 300px; /* Adjust size as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0; /* Ensure it's in the background */
+  pointer-events: none; /* Allow interaction with elements behind it */
+}
+
+.black-hole {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(
+    circle at center,
+    #000 0%,
+    #000 70%,
+    #1a1a1a 100%
+  );
+  border-radius: 50%;
+  box-shadow:
+    0 0 50px rgba(0, 0, 0, 0.8),
+    0 0 100px rgba(0, 0, 0, 0.6);
+  animation: black-hole-grow 8s ease-in-out infinite
+    alternate;
+}
+
+.event-horizon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180px; /* Slightly larger than black hole */
+  height: 180px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0%,
+    rgba(100, 0, 150, 0.5) 10%,
+    rgba(200, 0, 250, 0.8) 30%,
+    rgba(100, 0, 150, 0.5) 50%,
+    transparent 70%,
+    transparent 100%
+  );
+  animation: event-horizon-swirl 10s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes black-hole-grow {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes event-horizon-swirl {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }

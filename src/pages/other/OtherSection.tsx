@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { animate } from "animejs";
 import { ArrowLeft } from "lucide-react";
 
@@ -6,252 +6,312 @@ interface OtherSectionProps {
   onBack?: () => void;
 }
 
+interface ParticleConfig {
+  id: number;
+  spawnSide: "bottomLeft" | "topRight";
+  targetAngle: number;
+  orbitRadiusX: number;
+  orbitRadiusY: number;
+  orbitSpeed: number;
+  color: "warm" | "cool";
+  size: number;
+  entryDelay: number;
+  entryDuration: number;
+  extraSpins: number;
+}
+
+/* ================================================
+   KONFIGURASI ORBIT — edit angka di bawah ini
+   untuk mengubah bentuk & ukuran orbit
+   ================================================ */
+const ORBIT_BASE_X = 160; // radius X orbit terdalam (px)
+const ORBIT_EXPAND_X = 480; // seberapa besar orbit meluas ke samping
+const ORBIT_BASE_Y = 110; // radius Y orbit terdalam (px)
+const ORBIT_EXPAND_Y = 180; // seberapa besar orbit meluas ke atas-bawah
+
+/*
+   ACCRETION_DISK_TILT = kemiringan SELURUH cakram orbit (derajat)
+   Semua partikel mengikuti SATU bidang miring yang sama
+   0   = orbit horizontal (tidak miring)
+   -20 = miring ke kanan-atas (seperti gambar 3)
+   30  = miring ke kiri-bawah
+   Ubah angka ini untuk mengatur kemiringan SELURUH accretion disk
+*/
+const ACCRETION_DISK_TILT = 30;
+
+/*
+   Cara membuat OVAL: orbitBaseY jauh lebih kecil dari orbitBaseX
+   Contoh oval horizontal sangat pipih:
+     ORBIT_BASE_X = 400, ORBIT_BASE_Y = 80
+     ORBIT_EXPAND_X = 300, ORBIT_EXPAND_Y = 60
+   Contoh lingkaran (X ≈ Y):
+     ORBIT_BASE_X = 200, ORBIT_BASE_Y = 200
+     ORBIT_EXPAND_X = 200, ORBIT_EXPAND_Y = 200
+*/
+
+function generateParticles(
+  // count = JUMLAH TOTAL PARTIKEL / ORBITAL
+  //        Semakin besar = semakin padat / ramai visualnya
+  //        Contoh: 50 (jarang), 150 (sedang), 288 (padat)
+  count: number,
+): ParticleConfig[] {
+  return Array.from({ length: count }, (_, i) => {
+    // spawnSide = sisi awal munculnya partikel
+    //            Ganjil/genap menentukan dari bawah-kiri atau atas-kanan
+    //            50% dari bottomLeft, 50% dari topRight
+    const spawnSide =
+      i % 2 === 0 ? "bottomLeft" : "topRight";
+    const color = i % 2 === 0 ? "warm" : "cool";
+
+    // baseAngle = posisi angular dasar (0° - 360°)
+    //            i/count memastikan partikel tersebar MERATA di seluruh lingkaran
+    const baseAngle = (i / count) * 360;
+
+    // targetAngle = posisi akhir di orbit setelah entry selesai
+    //               baseAngle = tersebar MERATA di 360°
+    //               + variasi ±15° = partikel tidak berbaris terlalu rapi
+    //               Nilai ini TETAP per partikel (bukan acak total)
+    const targetAngle =
+      baseAngle + (Math.random() - 0.5) * 30;
+
+    // layer = "tingkatan" partikel dari pusat ke luar (0.0 - 1.0)
+    //         Math.random() = partikel tersebar ACAK di SEMUA radius
+    //         Sebelumnya i/count = partikel berdempetan mengikuti jalur spiral
+    //         Sekarang: partikel menyebar seperti galaxy, tidak berdempetan
+    const layer = Math.random();
+
+    // orbitRadiusX = JARAK HORIZONTAL dari pusat ke orbit (px)
+    //                Semakin besar = orbit semakin lebar ke samping
+    const orbitRadiusX =
+      ORBIT_BASE_X + layer * ORBIT_EXPAND_X;
+
+    // orbitRadiusY = JARAK VERTIKAL dari pusat ke orbit (px)
+    //                Beda X vs Y = orbit berbentuk OVAL (bukan lingkaran)
+    const orbitRadiusY =
+      ORBIT_BASE_Y + layer * ORBIT_EXPAND_Y;
+
+    // orbitSpeed = KECEPATAN BERPUTAR (derajat per detik)
+    //              Layer kecil (dekat pusat) = lebih cepat
+    //              Layer besar (jauh pusat) = lebih lambat
+    const orbitSpeed = 25 + (1 - layer) * 55;
+
+    // size = UKURAN FISIK PARTIKEL dalam pixel (2-4px)
+    const size = 0.1 + Math.random() * 0.9;
+
+    // entryDelay = WAKTU TUNGGU sebelum partikel mulai masuk (ms)
+    //              i * 5 = setiap partikel menunggu 5ms dari partikel sebelumnya
+    //              TOTAL WAKTU TUNGGU SEMUA: count * 5 ms (kurang lebih)
+    const entryDelay = i * 5 + Math.random() * 50;
+
+    // entryDuration = LAMA WAKTU spiral dari pojok ke orbit (ms)
+    //                 1000ms = cepat, 1400ms = lambat
+    const entryDuration = 500 + Math.random() * 120;
+
+    // extraSpins = JUMLAH PUTARAN TAMBAHAN saat entry spiral
+    //              1-2 putaran ekstra sebelum sampai ke orbit target
+    const extraSpins = 1 + Math.floor(Math.random() * 2);
+
+    // Debug: Log 5 partikel pertama
+    if (i < 5) {
+      console.log(
+        `Particle ${i}: side=${spawnSide}, target=${targetAngle.toFixed(1)}°, delay=${entryDelay}ms, spins=${extraSpins}`,
+      );
+    }
+
+    return {
+      id: i,
+      spawnSide,
+      targetAngle,
+      orbitRadiusX,
+      orbitRadiusY,
+      orbitSpeed,
+      color,
+      size,
+      entryDelay,
+      entryDuration,
+      extraSpins,
+    };
+  });
+}
+
 export function OtherSection({
   onBack,
 }: OtherSectionProps) {
-  const objectRef = useRef<HTMLDivElement>(null);
-  const trailRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const TRAIL_COUNT = 12; // Menentukan jumlah Trail
+  const containerRef = useRef<HTMLDivElement>(null);
+  const particleElsRef = useRef<
+    Record<number, HTMLDivElement | null>
+  >({});
+  const particleStatesRef = useRef<
+    Record<
+      number,
+      {
+        phase: "entering" | "orbiting";
+        orbitAngle: number;
+        entryAnim: ReturnType<typeof animate> | null;
+      }
+    >
+  >({});
 
+  // ============================================================
+  // GENERATE PARTIKEL — ubah angka di bawah untuk mengatur jumlah
+  // 288 = banyak partikel (padat, maksimal ~15 detik semua masuk)
+  // 50  = sedikit partikel (jarang, cepat selesai)
+  // ============================================================
+  const configs = useMemo(() => generateParticles(400), []);
+
+  // Initialize particle states and start entry animations
   useEffect(() => {
-    if (!objectRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    /* Gerakan melingkar (radius sama untuk x dan y)
-    const radius = 100;
-    const state = { angle: 0 };
+    // vw/vh = ukuran viewport (layar)
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
 
-    const animation = animate(state, {
-      angle: 360,
-      duration: 3000,
-      loop: true,
-      ease: "linear",
-      onLoop: () => console.log("Loop"),
-      onBegin: () => console.log("Begin"),
-      onUpdate: () => {
-        if (!objectRef.current) return;
-        const rad = (state.angle * Math.PI) / 180;
-        const x = Math.cos(rad) * radius;
-        const y = Math.sin(rad) * radius;
-        objectRef.current.style.transform = `translate(${x}px, ${y}px)`;
-      },
+    // targetSpawnDistance = jarak spawn dari pusat (px)
+    //                       0.55 = 55% dari sisi terpanjang viewport
+    //                       Semakin besar = spawn lebih dekat tepi layar
+    const targetSpawnDistance = Math.max(vw, vh) * 0.55;
+
+    // Start entry animations for all particles
+    configs.forEach((config) => {
+      const state: {
+        phase: "entering" | "orbiting";
+        orbitAngle: number;
+        entryAnim: ReturnType<typeof animate> | null;
+      } = {
+        phase: "entering",
+        orbitAngle: 0,
+        entryAnim: null,
+      };
+      particleStatesRef.current[config.id] = state;
+
+      // ENTRY ANIMATION — SEMUA DARI LUAR (INWARD)
+      // spawnSide = bottomLeft: masuk dari kiri-bawah, searah jarum jam
+      // spawnSide = topRight:  masuk dari kanan-atas, searah jarum jam
+
+      // startRadiusScale = dihitung agar partikel spawn di targetSpawnDistance
+      //                    orbit kecil butuh scale lebih besar untuk spawn jauh
+      //                    orbit besar minimal scale 2.0
+      const orbitRadius = Math.max(
+        config.orbitRadiusX,
+        config.orbitRadiusY,
+      );
+      const startRadiusScale = Math.max(
+        2.0,
+        targetSpawnDistance / orbitRadius,
+      );
+      const endRadiusScale = 1.0;
+
+      // startAngle = sudut awal di luar layar (screen coordinates, y ke bawah)
+      //              angle bertambah = searah jarum jam di layar
+      const startAngle =
+        config.spawnSide === "bottomLeft"
+          ? 135 + Math.random() * 45 // dari kiri-bawah (135°-180°)
+          : -45 + Math.random() * 45; // dari kanan-atas (-45°-0°)
+
+      // endAngle = berputar searah jarum jam sampai target + putaran ekstra
+      const endAngle =
+        config.targetAngle + config.extraSpins * 360;
+
+      // entryState yang akan dianimasikan oleh animejs
+      const entryState = {
+        angle: startAngle,
+        radiusScale: startRadiusScale,
+        scale: 4 + Math.random() * 2, // ukuran awal 4-6x lebih besar
+      };
+
+      // ENTRY ANIMATION (animejs) — mengikuti OVAL + TILT orbit
+      state.entryAnim = animate(entryState, {
+        angle: endAngle, // berputar searah jarum jam ke target
+        radiusScale: endRadiusScale, // menyusut dari 2x ke 1x
+        scale: 1, // mengecil dari besar ke ukuran normal
+        duration: config.entryDuration,
+        delay: config.entryDelay,
+        ease: "easeOutCubic",
+        onUpdate: () => {
+          const el = particleElsRef.current[config.id];
+          if (!el) return;
+
+          const rad = (entryState.angle * Math.PI) / 180;
+          const tilt =
+            (ACCRETION_DISK_TILT * Math.PI) / 180;
+
+          // RUMUS OVAL (sama persis dengan orbit berkelanjutan)
+          // radiusScale menyusut dari 2.0 → 1.0 = partikel dari jauh ke orbit
+          const xOval =
+            Math.cos(rad) *
+            config.orbitRadiusX *
+            entryState.radiusScale;
+          const yOval =
+            Math.sin(rad) *
+            config.orbitRadiusY *
+            entryState.radiusScale;
+
+          // TILT / MIRING (sama persis dengan orbit berkelanjutan)
+          const x =
+            xOval * Math.cos(tilt) - yOval * Math.sin(tilt);
+          const y =
+            xOval * Math.sin(tilt) + yOval * Math.cos(tilt);
+
+          el.style.transform = `translate(${x}px, ${y}px) scale(${entryState.scale})`;
+        },
+        onComplete: () => {
+          state.phase = "orbiting";
+          state.orbitAngle = config.targetAngle;
+        },
+      });
     });
-    */
 
-    /* Gerakan oval (radius x > radius y)
-    const radiusX = 270;
-    const radiusY = 90;
-    const state = { angle: 0 };
+    // Orbit loop using requestAnimationFrame
+    let rafId: number;
+    let lastTime = performance.now();
 
-    const animation = animate(state, {
-      angle: 360,
-      duration: 4000,
-      loop: true,
-      ease: "linear",
-      onUpdate: () => {
-        if (!objectRef.current) return;
-        const rad = (state.angle * Math.PI) / 180;
-        const x = Math.cos(rad) * radiusX;
-        const y = Math.sin(rad) * radiusY;
-        objectRef.current.style.transform = `translate(${x}px, ${y}px)`;
-      },
-    });
-    */
+    const tick = (now: number) => {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
 
-    /* Gerakan oval miring
-    const radiusX = 270;
-    const radiusY = 270;
-    const tiltDeg = 0;
-    const state = { angle: 0 };
+      configs.forEach((config) => {
+        const ps = particleStatesRef.current[config.id];
+        if (!ps || ps.phase !== "orbiting") return;
 
-    const animation = animate(state, {
-      angle: 360,
-      duration: 4000,
-      loop: true,
-      ease: "linear",
-      onLoop: () => console.log("Loop"),
-      onBegin: () => console.log("Begin"),
-      onUpdate: () => {
-        if (!objectRef.current) return;
-        const rad = (state.angle * Math.PI) / 180;
-        const tilt = (tiltDeg * Math.PI) / 180;
+        const el = particleElsRef.current[config.id];
+        if (!el) return;
 
-        const xOval = Math.cos(rad) * radiusX;
-        const yOval = Math.sin(rad) * radiusY;
+        ps.orbitAngle += config.orbitSpeed * dt;
 
-        const x = xOval * Math.cos(tilt) - yOval * Math.sin(tilt);
-        const y = xOval * Math.sin(tilt) + yOval * Math.cos(tilt);
+        const rad = (ps.orbitAngle * Math.PI) / 180;
+        const tilt = (ACCRETION_DISK_TILT * Math.PI) / 180;
 
-        objectRef.current.style.transform = `translate(${x}px, ${y}px)`;
-      },
-    });
-    */
+        const xOval = Math.cos(rad) * config.orbitRadiusX;
+        const yOval = Math.sin(rad) * config.orbitRadiusY;
 
-    // ============================================
-    // Gerakan accretion disk (lingkaran + rotasi + trail)
-    // ============================================
-
-    // radiusX = jarak dari pusat ke kiri/kanan (sumbu horizontal)
-    const radiusX = 270;
-    // radiusY = jarak dari pusat ke atas/bawah (sumbu vertikal)
-    const radiusY = 270;
-    // tiltDeg = sudut miring oval dalam derajat (0 = tidak miring)
-    const tiltDeg = 0;
-    // state = objek dummy yang akan dianimasikan oleh animejs
-    //         kita hanya animasi properti 'angle' dari 0 ke 360
-    const state = { angle: 0 };
-
-    // Memulai animasi dengan animejs
-    const animation = animate(state, {
-      // angle akan bergerak dari nilai awal (0) ke 360
-      angle: 360,
-      // durasi 1 putaran penuh = 4000ms (4 detik)
-      duration: 4000,
-      // loop terus menerus tanpa berhenti
-      loop: true,
-      // linear = kecepatan konstan (tidak memperlambat/mempercepat)
-      ease: "linear",
-      // callback saat animasi mulai loop baru
-      onLoop: () => console.log("Loop"),
-      // callback saat animasi pertama kali dimulai
-      onBegin: () => console.log("Begin"),
-      // ============================================
-      // onUpdate = dijalankan SETIAP FRAME animasi
-      //            inilah yang menggerakkan object & trail
-      // ============================================
-      onUpdate: () => {
-        // --- LANGKAH 1: Posisi Object Utama ---
-
-        // Cek jika object belum tersedia di DOM, hentikan
-        if (!objectRef.current) return;
-
-        // Konversi sudut dari derajat ke radian
-        // karena Math.cos/sin hanya menerima radian
-        const rad = (state.angle * Math.PI) / 180;
-
-        // Konversi sudut miring ke radian juga
-        const tilt = (tiltDeg * Math.PI) / 180;
-
-        // --- Hitung posisi object pada orbit (sebelum dimiringkan) ---
-        // xOval = posisi horizontal di orbit
-        //         cos(θ) memberikan nilai -1 s/d 1
-        //         dikali radiusX agar sesuai ukuran orbit
-        const xOval = Math.cos(rad) * radiusX;
-        // yOval = posisi vertikal di orbit
-        //         sin(θ) memberikan nilai -1 s/d 1
-        const yOval = Math.sin(rad) * radiusY;
-
-        // --- Terapkan rotasi miring (jika tiltDeg != 0) ---
-        // Rumus rotasi 2D:
-        //   x' = x·cos(tilt) - y·sin(tilt)
-        //   y' = x·sin(tilt) + y·cos(tilt)
         const x =
           xOval * Math.cos(tilt) - yOval * Math.sin(tilt);
         const y =
           xOval * Math.sin(tilt) + yOval * Math.cos(tilt);
 
-        // --- LANGKAH 2: Rotasi Object mengikuti arah orbit ---
+        el.style.transform = `translate(${x}px, ${y}px)`;
+      });
 
-        // dxOval = turunan x terhadap sudut (arah tangen horizontal)
-        //          turunan dari cos(rad) = -sin(rad)
-        const dxOval = -radiusX * Math.sin(rad);
-        // dyOval = turunan y terhadap sudut (arah tangen vertikal)
-        //          turunan dari sin(rad) = cos(rad)
-        const dyOval = radiusY * Math.cos(rad);
+      rafId = requestAnimationFrame(tick);
+    };
 
-        // Terapkan rotasi miring juga ke arah tangen
-        const dx =
-          dxOval * Math.cos(tilt) - dyOval * Math.sin(tilt);
-        const dy =
-          dxOval * Math.sin(tilt) + dyOval * Math.cos(tilt);
-
-        // atan2(dy, dx) = menghitung sudut arah vektor (dy, dx)
-        //                 hasilnya dalam radian, dari -PI sampai PI
-        // × (180/π) = konversi ke derajat untuk CSS rotate()
-        const rotationDeg =
-          Math.atan2(dy, dx) * (180 / Math.PI);
-
-        // Terapkan transform ke object utama:
-        // translate = pindahkan ke posisi (x, y) di orbit
-        // rotate    = putar object mengikuti arah tangen orbit
-        objectRef.current.style.transform = `translate(${x}px, ${y}px) rotate(${rotationDeg}deg)`;
-
-        // ============================================
-        // LANGKAH 3: Update Trail Particles (Accretion Disk)
-        // ============================================
-        // trailRefs.current berisi array 12 elemen <div>
-        // setiap particle akan berada di posisi yang
-        // sedikit tertinggal di belakang object utama
-
-        trailRefs.current.forEach((trail, i) => {
-          // Jika elemen trail belum ter-render, lewati
-          if (!trail) return;
-
-          // offset = berapa derajat particle ini tertinggal
-          //          particle ke-0 (i=0) tertinggal 5°
-          //          particle ke-1 (i=1) tertinggal 10°
-          //          dst. makin belakang makin besar offset-nya
-          const offset = -(i + 1) * 5;
-
-          // trailAngle = sudut object utama + offset (negatif)
-          //              jadi particle berada di belakang object
-          const trailAngle = state.angle + offset;
-
-          // Konversi sudut trail ke radian
-          const trailRad = (trailAngle * Math.PI) / 180;
-
-          // --- Hitung posisi trail (sama persis rumusnya) ---
-          const tXOval = Math.cos(trailRad) * radiusX;
-          const tYOval = Math.sin(trailRad) * radiusY;
-          const tX =
-            tXOval * Math.cos(tilt) -
-            tYOval * Math.sin(tilt);
-          const tY =
-            tXOval * Math.sin(tilt) +
-            tYOval * Math.cos(tilt);
-
-          // --- Hitung rotasi trail (sama persis rumusnya) ---
-          const tDxOval = -radiusX * Math.sin(trailRad);
-          const tDyOval = radiusY * Math.cos(trailRad);
-          const tDx =
-            tDxOval * Math.cos(tilt) -
-            tDyOval * Math.sin(tilt);
-          const tDy =
-            tDxOval * Math.sin(tilt) +
-            tDyOval * Math.cos(tilt);
-          const tRotationDeg =
-            Math.atan2(tDy, tDx) * (180 / Math.PI);
-
-          // --- Efek memudar & mengecil (fade-out) ---
-          // progress = 0 untuk particle terdepan, 1 untuk paling belakang
-          const progress = (i + 1) / TRAIL_COUNT;
-
-          // width = lebar particle, makin belakang makin sempit
-          //         50px × (1 - 0.6×progress)
-          //         particle depan = 50px, particle belakang = 20px
-          const width = 50 * (1 - progress * 0.6);
-
-          // opacity = transparansi, makin belakang makin tembus pandang
-          //           1 - 0.85×progress
-          //           particle depan = 100%, belakang = 15%
-          const opacity = 1 - progress * 0.85;
-
-          // Terapkan style ke elemen trail
-          trail.style.width = `${width}px`;
-          // marginLeft negatif = agar particle tetap centered
-          trail.style.marginLeft = `${-width / 2}px`;
-          trail.style.opacity = `${opacity}`;
-          trail.style.transform = `translate(${tX}px, ${tY}px) rotate(${tRotationDeg}deg)`;
-        });
-      },
-    });
+    rafId = requestAnimationFrame(tick);
 
     return () => {
-      animation.pause();
+      cancelAnimationFrame(rafId);
+      Object.values(particleStatesRef.current).forEach(
+        (ps) => {
+          ps.entryAnim?.pause();
+        },
+      );
+      particleStatesRef.current = {};
     };
-  }, []);
+  }, [configs]);
 
   return (
-    <section className="min-h-screen">
+    <section className="min-h-screen relative overflow-hidden">
       {/* Custom Navbar for Other page */}
       <nav className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-sm border-b border-border">
         <div className="flex items-center h-16 px-4">
@@ -269,39 +329,52 @@ export function OtherSection({
       </nav>
 
       {/* ============================================ */}
-      {/* BAGIAN RENDER / JSX                          */}
+      {/* LAYER ANIMASI — fullscreen di belakang konten */}
       {/* ============================================ */}
-      <div className="p-8 flex justify-center items-center pt-36">
-        {/* Container relatif untuk object & trail.
-            w-150 h-150 = 600px x 600px (lebar & tinggi area animasi).
-            relative = agar absolute children (object & trail)
-                       diposisikan relatif ke container ini. */}
-        <div className="relative w-150 h-150">
-          {/* Membuat 12 elemen trail-particle secara dinamis.
-              Array.from({ length: TRAIL_COUNT }) = buat array [0..11].
-              .map() = iterasi setiap elemen, render <div>.
-              key={i} = React membutuhkan key unik tiap list item.
-              ref={(el) => { trailRefs.current[i] = el; }}
-                     = simpan referensi DOM tiap trail ke trailRefs.current[i]
-                       agar bisa diakses di useEffect untuk diubah posisi.
-              className="trail-particle" = terapkan styling dari element.css. */}
-          {Array.from({ length: TRAIL_COUNT }).map(
-            (_, i) => (
-              <div
-                key={i}
-                ref={(el) => {
-                  trailRefs.current[i] = el;
-                }}
-                className="trail-particle"
-              />
-            ),
-          )}
-          {/* Object utama (garis putih bercahaya).
-              ref={objectRef} = referensi DOM untuk diakses di useEffect.
-              className="object" = styling utama dari element.css. */}
-          <div ref={objectRef} className="object" />
-        </div>
+      <div
+        ref={containerRef}
+        className="absolute inset-0 overflow-hidden pointer-events-none"
+      >
+        {/* Black Hole Center — placeholder untuk animasi user nanti */}
+        <div className="black-hole-center" />
+        <div className="black-hole-pulse" />
+        <div className="black-hole-ring" />
+        {/* ADDED: Event Horizon element */}
+        {/* <div className="event-horizon" /> */}
+
+        {/* Particles */}
+        {configs.map((config) => (
+          <div
+            key={config.id}
+            ref={(el) => {
+              particleElsRef.current[config.id] = el;
+            }}
+            className={`
+              glow-sphere 
+              glow-sphere-${config.color}
+              `}
+            style={{
+              width: `${config.size}px`,
+              height: `${config.size}px`,
+              marginTop: `${-config.size / 2}px`,
+              marginLeft: `${-config.size / 2}px`,
+            }}
+          />
+        ))}
       </div>
+
+      {/* ============================================ */}
+      {/* CONTENT LAYER */}
+      {/* ============================================ */}
+      {/* <div className="relative z-10 pt-20 pb-16 px-4 flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]">
+        <h1 className="text-3xl md:text-5xl font-heading mb-4 text-foreground">
+          Other Works
+        </h1>
+        <p className="text-muted-foreground text-center max-w-lg">
+          A collection of experiments, creative coding, and
+          miscellaneous projects.
+        </p>
+      </div> */}
     </section>
   );
 }
