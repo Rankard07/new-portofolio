@@ -5,7 +5,7 @@
 /* ================================================ */
 /* .glow-sphere = Glowing sphere particles          */
 /* ================================================ */
-.glow-sphere {
+/* .glow-sphere {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -41,7 +41,7 @@
 }
 
 .glow-sphere-random {
-  /* background: hsl(random(0, 360), 70%, 50%); */
+  background: hsl(random(0, 360), 70%, 50%);
   box-shadow:
     0 0 6px 2px rgba(255, 255, 255, 0.5),
     0 0 14px 4px rgba(255, 255, 255, 0.3),
@@ -63,31 +63,10 @@
       0 0 18px 4px rgba(255, 255, 255, 0.4),
       0 0 36px 8px rgba(255, 255, 255, 0.2);
   }
-}
-
-.glow-sphere-o-type {
-}
-
-.glow-sphere-b-type {
-}
-
-.glow-sphere-a-type {
-}
-
-.glow-sphere-f-type {
-}
-
-.glow-sphere-g-type {
-}
-
-.glow-sphere-k-type {
-}
-
-.glow-sphere-m-type {
-}
+} */
 
 /* ================================================ */
-/* .black-hole-center = Pusat / placeholder        */
+/* .black-hole-center = Pusat + Back Button        */
 /* ================================================ */
 .black-hole-center {
   position: absolute;
@@ -103,6 +82,21 @@
     #11111a 100%
   );
   transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 20px 4px rgba(100, 100, 220, 0.08),
+    0 0 50px 12px rgba(80, 80, 200, 0.04);
+  cursor: pointer;
+  transition:
+    /* transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), */
+    transform 0.6s ease,
+    box-shadow 0.6s ease;
+  z-index: 5;
+}
+
+.black-hole-center:hover {
+  /* scale(4) = cukup besar untuk menutupi ring di sekitarnya */
+  transform: translate(-50%, -50%) scale(2);
+  transition: transform 0.5s ease-in-out;
   box-shadow:
     0 0 20px 4px rgba(100, 100, 220, 0.08),
     0 0 50px 12px rgba(80, 80, 200, 0.04);
@@ -180,107 +174,60 @@
 /* ================================================ */
 /* .object = Elemen utama (garis bercahaya)         */
 /* ================================================ */
+/*
 .object {
-  /* position absolute = lepaskan dari flow normal,
-     diposisikan lewat top/left di dalam container */
   position: absolute;
-  /* Posisikan di tengah container (atas 50%, kiri 50%) */
   top: 50%;
   left: 50%;
-  /* Lebar garis = 50 piksel */
   width: 50px;
-  /* Tinggi garis = 2 piksel (tipis) */
   height: 2px;
-  /* margin-top: -1px = geser ke atas setengah tinggi
-     agar garis benar-benar di tengah secara vertikal */
   margin-top: -1px;
-  /* margin-left: -25px = geser ke kiri setengah lebar
-     agar garis benar-benar di tengah secara horizontal */
   margin-left: -25px;
-
-  /* ================================================ */
-  /* Background gradient: terang di tengah,           */
-  /* memudar ke transparan di kedua ujung               */
-  /* ================================================ */
   background: linear-gradient(
     90deg,
-    /* arah gradient: kiri ke kanan */ transparent 0%,
-    /* ujung kiri: transparan */ rgba(200, 200, 220, 0.8)
-      15%,
-    /* sedikit ke kanan: putih keabu-abuan */ #ffffff 50%,
-    /* tengah: putih murni */ rgba(200, 200, 220, 0.8) 85%,
-    /* sedikit ke kiri: putih keabu-abuan */ transparent
-      100% /* ujung kanan: transparan */
+    transparent 0%,
+    rgba(200, 200, 220, 0.8) 15%,
+    #ffffff 50%,
+    rgba(200, 200, 220, 0.8) 85%,
+    transparent 100%
   );
-  /* border-radius 50% = ujung membulat (pill shape) */
   border-radius: 50%;
-
-  /* ================================================ */
-  /* Box-shadow berlapis = efek glow / cahaya          */
-  /* Semakin ke lapisan luar, semakin besar & redup    */
-  /* ================================================ */
   box-shadow:
-    /* Lapisan 1 (terdalam): glow kecil & padat */
     0 0 4px 1px rgba(160, 160, 200, 0.9),
-    /* Lapisan 2: glow sedang */ 0 0 10px 3px
-      rgba(140, 140, 200, 0.6),
-    /* Lapisan 3: glow besar & redup */ 0 0 20px 6px
-      rgba(120, 120, 200, 0.4),
-    /* Lapisan 4 (terluar): glow sangat besar & samar */ 0 0
-      40px 12px rgba(100, 100, 200, 0.2);
-
-  /* z-index: 10 = taruh di ATAS trail particles */
+    0 0 10px 3px rgba(140, 140, 200, 0.6),
+    0 0 20px 6px rgba(120, 120, 200, 0.4),
+    0 0 40px 12px rgba(100, 100, 200, 0.2);
   z-index: 10;
 }
 
-/* ================================================ */
-/* .trail-particle = Elemen jejak (12 elemen)        */
-/* ================================================ */
-
 .trail-particle {
-  /* Sama: absolute, posisi dari container */
   position: absolute;
   top: 50%;
   left: 50%;
-  /* Tinggi sama dengan object utama (2px) */
   height: 2px;
-  /* Centering vertikal */
   margin-top: -1px;
-  /* Ujung membulat */
   border-radius: 50%;
-
-  /* Gradient lebih redup dari object utama */
   background: linear-gradient(
     90deg,
     transparent,
-    /* ujung kiri transparan */ rgba(180, 180, 210, 0.6),
-    /* tengah: abu kebiruan */ transparent
-      /* ujung kanan transparan */
+    rgba(180, 180, 210, 0.6),
+    transparent
   );
-
-  /* Glow tipis & redup */
   box-shadow: 0 0 6px 2px rgba(140, 140, 200, 0.25);
-
-  /* pointer-events: none = trail tidak mengganggu klik/tap */
-  /* (meski transparan, tetap mencegah event mouse masuk) */
   pointer-events: none;
 }
 
-/*-----------------------------------------------*/
-/* BLACK HOLE EVENT HORIZON EFFECT               */
-/*-----------------------------------------------*/
 .black-hole-container {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px; /* Adjust size as needed */
-  height: 300px; /* Adjust size as needed */
+  width: 300px;
+  height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 0; /* Ensure it's in the background */
-  pointer-events: none; /* Allow interaction with elements behind it */
+  z-index: 0;
 }
 
 .black-hole {
@@ -297,15 +244,14 @@
   box-shadow:
     0 0 50px rgba(0, 0, 0, 0.8),
     0 0 100px rgba(0, 0, 0, 0.6);
-  animation: black-hole-grow 8s ease-in-out infinite
-    alternate;
+  animation: black-hole-grow 8s ease-in-out infinite alternate;
 }
 
 .event-horizon {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 180px; /* Slightly larger than black hole */
+  width: 180px;
   height: 180px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
@@ -323,19 +269,296 @@
 }
 
 @keyframes black-hole-grow {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.05);
-  }
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
 }
 
 @keyframes event-horizon-swirl {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+*/
+
+/*-----------------------------------------------*/
+/* Black Hole as the center of Galaxy */
+/* TODO Later*/
+/*-----------------------------------------------*/
+
+.galaxy-scene {
+  transform-origin: 50% 50%;
+  /* background gelap solid = mencegah flickering putih saat animasi berat */
+  background-color: #050508;
+}
+
+.galaxy-disk {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(1200px, 160vw);
+  height: min(420px, 55vw);
+  transform: translate(-50%, -50%) rotate(30deg);
+  border-radius: 999px;
+  /*
+     Layer radial-gradient = glow disk galaxy
+     blur besar (60px) = transisi halus dari putih ke hitam
+  */
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.03) 20%,
+      rgba(255, 255, 255, 0.01) 45%,
+      rgba(0, 0, 0, 0) 80%
+    ),
+    radial-gradient(
+      ellipse at 35% 50%,
+      rgba(255, 210, 140, 0.09) 0%,
+      rgba(255, 170, 90, 0.045) 25%,
+      rgba(0, 0, 0, 0) 75%
+    ),
+    radial-gradient(
+      ellipse at 65% 50%,
+      rgba(160, 210, 255, 0.08) 0%,
+      rgba(90, 150, 255, 0.04) 25%,
+      rgba(0, 0, 0, 0) 75%
+    );
+  filter: blur(30px);
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/*
+.galaxy-gas-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(1200px, 160vw);
+  height: min(420px, 55vw);
+  border-radius: 999px;
+  transform: translate(-50%, -50%) rotate(30deg);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+  filter: blur(38px);
+  transform-origin: 50% 50%;
+  animation: galaxy-gas-rotate 18s linear infinite;
+}
+
+.galaxy-gas-layer-1 {
+  background:
+    radial-gradient(ellipse at 30% 45%, rgba(209 190 255 / 0.84) 0%, transparent 55%),
+    radial-gradient(ellipse at 60% 55%, rgba(255 201 150 / 0.75) 0%, transparent 55%),
+    radial-gradient(ellipse at 45% 55%, rgba(150 201 255 / 0.8) 0%, transparent 60%);
+}
+
+.galaxy-gas-layer-2 {
+  opacity: 0.35;
+  filter: blur(55px);
+  animation-duration: 26s;
+  animation-direction: reverse;
+  background:
+    radial-gradient(ellipse at 35% 50%, rgba(255 171 140 / 0.78) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 45%, rgba(190 220 255 / 0.78) 0%, transparent 62%),
+    radial-gradient(ellipse at 55% 60%, rgba(255 235 190 / 0.69) 0%, transparent 64%);
+}
+
+@keyframes galaxy-gas-rotate {
+  from { transform: translate(-50%, -50%) rotate(30deg) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(30deg) rotate(360deg); }
+}
+*/
+
+/*
+.galaxy-cloud {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.11;
+  mix-blend-mode: screen;
+  z-index: 2;
+}
+
+.galaxy-cloud-1 {
+  width: 700px;
+  height: 240px;
+  transform: translate(-50%, -50%) rotate(28deg);
+  background: radial-gradient(ellipse at center, rgba(185 126 126 / 0.71) 0%, transparent 70%);
+}
+
+.galaxy-cloud-2 {
+  width: 900px;
+  height: 320px;
+  transform: translate(-50%, -50%) rotate(32deg);
+  background: radial-gradient(ellipse at center, rgb(246 255 0) 0%, transparent 70%);
+}
+
+.galaxy-cloud-3 {
+  width: 500px;
+  height: 180px;
+  transform: translate(-50%, -50%) rotate(26deg);
+  background: radial-gradient(ellipse at center, rgb(0 255 17) 0%, transparent 70%);
+}
+*/
+
+.gas-blob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  z-index: 4; /* Before = 2 */
+  mix-blend-mode: normal; /* Default blend mode, bukan screen */
+  opacity: 0.85 !important;
+  filter: blur(75px);
+  will-change: transform, opacity;
+  background:
+    radial-gradient(
+      ellipse at 20% 30%,
+      rgba(255, 180, 80, 0.4) 0%,
+      /* Gold hangat di tengah */ transparent 70%
+    ),
+    radial-gradient(
+      ellipse at 45% 25%,
+      rgba(30, 100, 255, 0.3) 0%,
+      /* Biru nebula di pinggir */ transparent 65%
+    ),
+    radial-gradient(
+      ellipse at 20% 20%,
+      rgba(100, 40, 255, 0.2) 0%,
+      /* Ungu gelap sebagai penghubung */ transparent 80%
+    );
+}
+
+/*
+.gas-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(22px);
+  opacity: 0;
+  will-change: transform, opacity;
+  z-index: 2;
+  mix-blend-mode: screen;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(209 190 255 / 0.7) 0%,
+    rgba(255 201 150 / 0.5) 35%,
+    transparent 70%
+  );
+}
+*/
+
+.black-hole-center-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* z-index tinggi agar center & ring berada di atas galaxy disk/partikel */
+  z-index: 10;
+}
+
+/*-----------------------------------------------*/
+/* Star Particles */
+/*-----------------------------------------------*/
+
+.star-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  pointer-events: none;
+  /* will-change = hint browser untuk optimize transform & opacity */
+  will-change: transform, opacity;
+  z-index: 3;
+  /* mix-blend-mode: screen; */
+  /* Berikan drop-shadow hitam tipis sebagai 'pembatas' dengan awan gas */
+  /* filter: brightness(1.3); */
+  /* drop-shadow(0 0 1px rgba(0, 0, 0, 0.8)); */
+}
+
+/*
+   Inti bintang = diatur oleh radial-gradient.
+   Stop-color pertama (0%) = pusat paling padat.
+   Stop berikutnya = seberapa jauh warna meluas sebelum transparan.
+   Semakin rapat stop-color → inti lebih kecil & tajam.
+   Semakin lebar stop-color → inti lebih besar & blur.
+*/
+.star-o {
+  background: radial-gradient(
+    circle,
+    rgba(120, 180, 255, 0.98) 0%,
+    rgba(80, 140, 255, 0.4) 25%,
+    transparent 50%
+  );
+  /* box-shadow: x-offset y-offset blur spread color-opacity */
+  /* O-type = langka tapi sangat terang, glow besar agar terlihat jelas */
+  box-shadow: 0 0 220px 80px rgba(100, 170, 255, 0.8);
+}
+
+.star-b {
+  background: radial-gradient(
+    circle,
+    rgba(190, 220, 255, 0.98) 0%,
+    rgba(120, 170, 255, 0.35) 28%,
+    transparent 52%
+  );
+  /* B-type = terang, glow medium-besar */
+  box-shadow: 0 0 180px 60px rgba(120, 170, 255, 0.68);
+}
+
+.star-a {
+  background: radial-gradient(
+    circle,
+    rgba(245, 250, 255, 0.95) 0%,
+    rgba(200, 220, 255, 0.25) 50%,
+    transparent 72%
+  );
+  box-shadow: 0 0 7px 2px rgba(220, 235, 255, 0.35);
+}
+
+.star-f {
+  background: radial-gradient(
+    circle,
+    rgba(255, 245, 230, 0.95) 0%,
+    rgba(255, 230, 180, 0.22) 52%,
+    transparent 72%
+  );
+  box-shadow: 0 0 6px 2px rgba(255, 230, 180, 0.28);
+}
+
+.star-g {
+  background: radial-gradient(
+    circle,
+    rgba(255, 235, 190, 0.95) 0%,
+    rgba(255, 210, 130, 0.22) 52%,
+    transparent 72%
+  );
+  box-shadow: 0 0 6px 2px rgba(255, 215, 140, 0.26);
+}
+
+.star-k {
+  background: radial-gradient(
+    circle,
+    rgba(255, 205, 140, 0.95) 0%,
+    rgba(255, 170, 90, 0.22) 52%,
+    transparent 72%
+  );
+  box-shadow: 0 0 6px 2px rgba(255, 180, 110, 0.24);
+}
+
+.star-m {
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 170, 140, 0.9) 0%,
+    rgba(255, 110, 80, 0.2) 55%,
+    transparent 74%
+  );
+  box-shadow: 0 0 12px 4px rgba(255, 120, 90, 0.3);
 }
