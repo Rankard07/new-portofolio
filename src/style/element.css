@@ -285,7 +285,7 @@
 /*-----------------------------------------------*/
 
 .galaxy-scene {
-  transform-origin: 50% 50%;
+  transform-origin: 50% 50%; 
   /* background gelap solid = mencegah flickering putih saat animasi berat */
   background-color: #050508;
 }
