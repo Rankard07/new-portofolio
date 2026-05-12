@@ -1,38 +1,20 @@
 import { useState } from "react";
-import {
-  Code2,
-  Mail,
-  ExternalLink,
-  ChevronDown,
-  FileText,
-} from "lucide-react";
+import { ChevronDown, Code2, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MobileHamburger } from "./MobileHamburger";
 // import ThemeModeToggle from "./ModeToggle";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuTrigger,
-  NavigationMenuContent,
-} from "@/components/ui/navigation-menu";
-import { ListItem } from "@/components/ui/created/ListItem";
-import { FaLinkedinIn } from "react-icons/fa";
-import {
-  PAGES,
-  DEFAULT_CONTACT_ITEMS,
-} from "./navbar-config";
+import { PAGES } from "./navbar-config";
 import { AnimatedThemeToggler } from "../animated-theme-toggler";
 import { motion } from "motion/react";
 import { Button } from "../button";
 import { GlowingAnimatedBG } from "./GlowingAnimatedBG";
 import { ConicBorderWrapper } from "./ConicBorderWrapper";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../dropdown-menu";
 
 // ============================================
 // INTERFACES (Type Definitions)
@@ -59,52 +41,6 @@ const DEFAULT_LOGO: NavbarLogo = {
   title: "Your Name",
   icon: <Code2 className="text-primary" size={24} />,
 };
-
-// Icon mapping for desktop Contact dropdown
-const DESKTOP_CONTACT_ICONS: Record<
-  string,
-  React.ReactNode
-> = {
-  Email: <Mail size={16} />,
-  LinkedIn: <FaLinkedinIn size={16} />,
-  GitHub: <ExternalLink size={16} />,
-};
-
-// ============================================
-// SUB-COMPONENT: Desktop Contact Dropdown
-// ============================================
-
-function ContactDropdown() {
-  return (
-    <div>
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              Contact
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150">
-                {DEFAULT_CONTACT_ITEMS.map(
-                  (item, index) => (
-                    <ListItem key={index} href={item.href}>
-                      <a className="flex items-center gap-2">
-                        {DESKTOP_CONTACT_ICONS[
-                          item.label
-                        ] ?? <ExternalLink size={16} />}
-                        {item.label}
-                      </a>
-                    </ListItem>
-                  ),
-                )}
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-    </div>
-  );
-}
 
 // ============================================
 // SUB-COMPONENT: CV Download
@@ -136,7 +72,10 @@ function CVDownload() {
           "
             onClick={() => {
               // TODO: Ganti dengan path CV yang sesungguhnya
-              window.open("/cv.pdf", "_blank");
+              window.open(
+                "/Resume-CV.Haltev.pdf",
+                "_blank",
+              );
             }}
           >
             <FileText size={18} />
@@ -224,17 +163,21 @@ export function Navbar({
       className={cn("sticky top-0 z-50 w-full", className)}
     >
       <nav>
-        <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16">
+        <div className="w-full px-2 sm:px-4 lg:px-8">
+          <div className="flex items-center h-14 sm:h-16">
             {/* Logo Section - Left */}
             <div
               className={cn(
-                "flex items-center gap-2",
+                "flex items-center gap-2 shrink-0 max-w-30",
                 logo.className,
               )}
             >
-              {logo.icon}
-              <span className="font-medium">
+              {logo.icon && (
+                <div className="hidden sm:block">
+                  {logo.icon}
+                </div>
+              )}
+              <span className="font-medium text-sm sm:text-base truncate">
                 {logo.title}
               </span>
             </div>
@@ -304,26 +247,24 @@ export function Navbar({
               </div>
 
               {/* Mobile Page Dropdown - Center */}
-              <div className="flex items-center gap-2 md:hidden">
+              <div className="flex flex-1 justify-center items-center md:hidden">
                 <MobilePageDropdown
                   activePage={activePage}
                   onPageChange={onPageChange}
                 />
-                <CVDownload />
               </div>
             </div>
             {/* END - Center Navigation */}
 
-            {/* Right Navigation - Desktop: Contact Dropdown + Theme Toggle */}
+            {/* Right Navigation - Desktop: CV Download + Theme Toggle */}
             <div className="hidden md:flex items-center gap-3">
               <CVDownload />
-              <ContactDropdown />
               {/* <ThemeModeToggle /> */}
               <AnimatedThemeToggler />
             </div>
 
-            {/* Mobile Controls - Contact Hamburger + Theme Toggle */}
-            <div className="md:hidden flex items-center gap-2">
+            {/* Mobile Controls - Theme Toggle + Hamburger Only */}
+            <div className="md:hidden flex items-center gap-1 shrink-0">
               {/* <ThemeModeToggle /> */}
               <AnimatedThemeToggler />
               <MobileHamburger />

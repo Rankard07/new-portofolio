@@ -126,7 +126,7 @@ export default function App() {
               className="w-full"
             >
               {page === "home" && (
-                <div className="max-w-[70rem] mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="w-full max-w-[70rem] mx-auto px-2 sm:px-4 lg:px-8">
                   <div id="hero">
                     <HeroSection />
                   </div>
@@ -140,7 +140,7 @@ export default function App() {
               )}
 
               {page === "project" && (
-                <div className="max-w-[70rem] mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="w-full max-w-[70rem] mx-auto px-2 sm:px-4 lg:px-8">
                   <ProjectsSection />
                 </div>
               )}

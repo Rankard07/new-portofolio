@@ -6,10 +6,10 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative py-10 pt-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative py-10 pt-20 px-2 sm:px-4 lg:px-8 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto relative">
-        <div className="bg-card border border-border rounded-xl p-8 lg:p-12 transition duration-500 ease-in-out hover:border-fuchsia-500/50 dark:hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 hover:scale-105 relative overflow-hidden group">
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-8 lg:p-12 transition duration-500 ease-in-out hover:border-fuchsia-500/50 dark:hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 hover:scale-105 relative overflow-hidden group">
           <CardHoverOverlays />
           <div className="relative z-10 flex flex-col lg:flex-row items-center gap-12">
             {/* Hero Content - Start */}
@@ -27,7 +27,7 @@ export function HeroSection() {
               {/* Badge - End */}
 
               {/* Title - Start */}
-              <h1 className="text-5xl lg:text-6xl mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl mb-6 break-words">
                 Front-End Developer &<br />
                 <span className="text-primary">
                   UI/UX Designer
