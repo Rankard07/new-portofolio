@@ -28,8 +28,11 @@ const pageVariants = {
   },
   // Exit animation to left/right
   exit: (direction: number) => ({
-    x: direction > 0 ? -300 : 300,
+    // Jika direction < 0 (kembali dari Other), kita hilangkan slide x
+    // agar tidak merusak animasi Outro Black Hole yang sedang berjalan.
+    x: direction > 0 ? -300 : 0,
     opacity: 0,
+    transition: { duration: 0.3 }, // Exit lebih cepat agar transisi ke Home mulus
   }),
 
   firstLoad: {

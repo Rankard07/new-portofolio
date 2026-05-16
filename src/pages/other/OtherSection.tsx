@@ -47,6 +47,7 @@ export function OtherSection({
   const containerRef = useRef<HTMLDivElement>(null);
   const centerWrapperRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
 
   /*
     DOM particle refs & state — DIKOMENTARI karena
@@ -106,6 +107,51 @@ export function OtherSection({
       },
     });
   }, []);
+
+  // ============================================================
+  // OUTRO ANIMATION: Black Hole Expansion then Scene Zoom-In
+  // ============================================================
+  const handleBackWithAnimation = () => {
+    if (isExiting) return;
+    setIsExiting(true);
+
+    const container = containerRef.current;
+    const centerWrapper = centerWrapperRef.current;
+    if (!container || !centerWrapper) {
+      onBack?.();
+      return;
+    }
+
+    // 1. Animasi Black Hole membesar sangat cepat (Efek menelan layar)
+    const centerState = { scale: 1 };
+    animate(centerState, {
+      scale: 30, // Sangat besar agar menutupi seluruh pandangan
+      duration: 800,
+      ease: "easeInExpo",
+      onUpdate: () => {
+        centerWrapper.style.transform = `translate(-50%, -50%) scale(${centerState.scale})`;
+      },
+    });
+
+    // 2. Animasi Scene Zoom In & Fade Out (Kebalikan dari Intro)
+    const sceneState = { scale: 1, opacity: 1 };
+    animate(sceneState, {
+      scale: 2.6,
+      opacity: 0,
+      duration: 1000,
+      delay: 200, // Mulai sedikit setelah black hole mulai membesar
+      ease: "easeInQuart",
+      onUpdate: () => {
+        container.style.transform = `scale(${sceneState.scale})`;
+        container.style.opacity = String(
+          sceneState.opacity,
+        );
+      },
+      complete: () => {
+        onBack?.();
+      },
+    });
+  };
 
   /*
     ============================================================
@@ -168,16 +214,29 @@ export function OtherSection({
         <div className="galaxy-cloud galaxy-cloud-3" /> */}
 
         <div
-          onClick={onBack}
-          onMouseEnter={() => setIsHovered(true)}
+          // onClick={onBack}
+          // onMouseEnter={() => setIsHovered(true)}
+          onClick={handleBackWithAnimation}
+          onMouseEnter={() =>
+            !isExiting && setIsHovered(true)
+          }
           onMouseLeave={() => setIsHovered(false)}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ")
-              onBack?.();
+            if (
+              (e.key === "Enter" || e.key === " ") &&
+              !isExiting
+            ) {
+              handleBackWithAnimation();
+            }
           }}
           aria-label="Go back"
+          className={
+            isExiting
+              ? "pointer-events-none"
+              : "cursor-pointer"
+          }
         >
           {/* Black Hole Center Wrapper — menampung center, pulse, dan ring */}
           <div
