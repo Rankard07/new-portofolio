@@ -1,0 +1,10 @@
+name: Manual Deploy to Netlify
+on:
+  workflow_dispatch: # Ini yang memunculkan tombol manual di GitHub
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Netlify Build
+        run: curl -X POST -d {} https://api.netlify.com/build_hooks/https://api.netlify.com/build_hooks/6a0b02989b75b2872f58c3d1
