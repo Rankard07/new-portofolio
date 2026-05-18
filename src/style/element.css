@@ -478,83 +478,33 @@
   /* drop-shadow(0 0 1px rgba(0, 0, 0, 0.8)); */
 }
 
-/*
-   Inti bintang = diatur oleh radial-gradient.
-   Stop-color pertama (0%) = pusat paling padat.
-   Stop berikutnya = seberapa jauh warna meluas sebelum transparan.
-   Semakin rapat stop-color → inti lebih kecil & tajam.
-   Semakin lebar stop-color → inti lebih besar & blur.
-*/
-.star-o {
-  background: radial-gradient(
-    circle,
-    rgba(120, 180, 255, 0.98) 0%,
-    rgba(80, 140, 255, 0.4) 25%,
-    transparent 50%
-  );
-  /* box-shadow: x-offset y-offset blur spread color-opacity */
-  /* O-type = langka tapi sangat terang, glow besar agar terlihat jelas */
-  box-shadow: 0 0 220px 80px rgba(100, 170, 255, 0.8);
+/*-----------------------------------------------*/
+/* Navbar Active Icon - START */
+/*-----------------------------------------------*/
+
+.navbar-active-icon {
+  position: absolute;
+  top: 0; /* Akan dikontrol oleh animasi 'y' di Framer Motion */
+  left: 50%;
+  /* transform: translateX(-50%) dihapus karena sudah ditangani oleh Framer Motion x prop */
+  z-index: 20;
+  pointer-events: none;
+  color: var(--primary);
+
+  /* Desain Tab (Setengah Lingkaran) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 14px 12px 14px;
+  border-bottom-left-radius: 9999px;
+  border-bottom-right-radius: 9999px;
+  border: 1px solid var(--border);
+  border-top: none; /* Agar terlihat menyatu dengan bagian atas */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.star-b {
-  background: radial-gradient(
-    circle,
-    rgba(190, 220, 255, 0.98) 0%,
-    rgba(120, 170, 255, 0.35) 28%,
-    transparent 52%
-  );
-  /* B-type = terang, glow medium-besar */
-  box-shadow: 0 0 180px 60px rgba(120, 170, 255, 0.68);
-}
-
-.star-a {
-  background: radial-gradient(
-    circle,
-    rgba(245, 250, 255, 0.95) 0%,
-    rgba(200, 220, 255, 0.25) 50%,
-    transparent 72%
-  );
-  box-shadow: 0 0 7px 2px rgba(220, 235, 255, 0.35);
-}
-
-.star-f {
-  background: radial-gradient(
-    circle,
-    rgba(255, 245, 230, 0.95) 0%,
-    rgba(255, 230, 180, 0.22) 52%,
-    transparent 72%
-  );
-  box-shadow: 0 0 6px 2px rgba(255, 230, 180, 0.28);
-}
-
-.star-g {
-  background: radial-gradient(
-    circle,
-    rgba(255, 235, 190, 0.95) 0%,
-    rgba(255, 210, 130, 0.22) 52%,
-    transparent 72%
-  );
-  box-shadow: 0 0 6px 2px rgba(255, 215, 140, 0.26);
-}
-
-.star-k {
-  background: radial-gradient(
-    circle,
-    rgba(255, 205, 140, 0.95) 0%,
-    rgba(255, 170, 90, 0.22) 52%,
-    transparent 72%
-  );
-  box-shadow: 0 0 6px 2px rgba(255, 180, 110, 0.24);
-}
-
-.star-m {
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 170, 140, 0.9) 0%,
-    rgba(255, 110, 80, 0.2) 55%,
-    transparent 74%
-  );
-  box-shadow: 0 0 12px 4px rgba(255, 120, 90, 0.3);
-}
+/*-----------------------------------------------*/
+/* END */
+/*-----------------------------------------------*/

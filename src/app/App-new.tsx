@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "@/components/ui/created/theme-provider";
-import { Navbar } from "@/components/ui/created/Navbar";
 import { PAGES } from "@/components/ui/created/navbar-config";
+// import { TableOfContents } from "@/components/ui/created/TableOfContents";
+import { AnimatePresence, motion } from "motion/react";
+
+import { ContactSection } from "@/pages/ContactSection";
 import { HeroSection } from "@/pages/home/HeroSection";
 import { AboutSection } from "@/pages/home/AboutSection";
 import { SkillsSection } from "@/pages/home/SkillSection";
 import { ProjectsSection } from "@/pages/project/ProjectSection";
 import { OtherSection } from "@/pages/other/OtherSection";
-// import { TableOfContents } from "@/components/ui/created/TableOfContents";
+
+import { Navbar } from "@/components/ui/created/Navbar";
 import Footer from "@/pages/Footer";
-import { AnimatePresence, motion } from "motion/react";
 
 type Page = (typeof PAGES)[number]["id"];
 
@@ -129,7 +132,7 @@ export default function App() {
               className="w-full"
             >
               {page === "home" && (
-                <div className="w-full max-w-[70rem] mx-auto px-2 sm:px-4 lg:px-8">
+                <div className="w-full max-w-280 mx-auto px-2 sm:px-4 lg:px-8">
                   <div id="hero">
                     <HeroSection />
                   </div>
@@ -143,8 +146,14 @@ export default function App() {
               )}
 
               {page === "project" && (
-                <div className="w-full max-w-[70rem] mx-auto px-2 sm:px-4 lg:px-8">
+                <div className="w-full max-w-280 mx-auto px-2 sm:px-4 lg:px-8">
                   <ProjectsSection />
+                </div>
+              )}
+
+              {page === "contact" && (
+                <div className="w-full max-w-280 mx-auto px-2 sm:px-4 lg:px-8">
+                  <ContactSection />
                 </div>
               )}
 

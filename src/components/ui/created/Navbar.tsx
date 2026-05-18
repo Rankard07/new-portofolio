@@ -1,20 +1,29 @@
 import { useState } from "react";
-import { ChevronDown, Code2, FileText } from "lucide-react";
+import {
+  ChevronDown,
+  Code2,
+  FileText,
+  Home,
+  FolderGit2,
+  // Sparkles,
+  Mail,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MobileHamburger } from "./MobileHamburger";
 // import ThemeModeToggle from "./ModeToggle";
-import { PAGES } from "./navbar-config";
 import { AnimatedThemeToggler } from "../animated-theme-toggler";
 import { motion } from "motion/react";
 import { Button } from "../button";
-import { GlowingAnimatedBG } from "./GlowingAnimatedBG";
-import { ConicBorderWrapper } from "./ConicBorderWrapper";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../dropdown-menu";
+
+import { GlowingAnimatedBG } from "./GlowingAnimatedBG";
+import { ConicBorderWrapper } from "./ConicBorderWrapper";
+import { PAGES } from "./navbar-config";
 
 // ============================================
 // INTERFACES (Type Definitions)
@@ -37,9 +46,26 @@ interface NavbarProps {
 // CONSTANTS (Configuration Data)
 // ============================================
 
+// const DEFAULT_LOGO_TITLE = "Zahran";
+// const DEFAULT_LOGO: NavbarLogo = {
+//   title: DEFAULT_LOGO_TITLE,
+//   icon: (
+//     <span className="text-primary font-mono font-semibold">
+//       &lt;{DEFAULT_LOGO_TITLE}/&gt;
+//     </span>
+//   ),
+// };
 const DEFAULT_LOGO: NavbarLogo = {
-  title: "Your Name",
+  title: "Zahran",
   icon: <Code2 className="text-primary" size={24} />,
+};
+
+// Mapping ID Halaman ke Icon yang sesuai untuk efek floating di Navbar
+const PAGE_ICONS: Record<string, React.ReactNode> = {
+  home: <Home size={14} />,
+  project: <FolderGit2 size={14} />,
+  contact: <Mail size={14} />,
+  // other: <Sparkles size={14} />,
 };
 
 // ============================================
@@ -172,13 +198,19 @@ export function Navbar({
                 logo.className,
               )}
             >
-              {logo.icon && (
+              {/* {logo.icon && (
                 <div className="hidden sm:block">
                   {logo.icon}
                 </div>
-              )}
-              <span className="font-medium text-sm sm:text-base truncate">
+              )} */}
+              <span className="text-2xl text-blue-400">
+                &lt;
+              </span>
+              <span className="font-medium text-base sm:text-2xl ">
                 {logo.title}
+              </span>
+              <span className="text-2xl text-blue-400">
+                /&gt;
               </span>
             </div>
 
@@ -236,6 +268,42 @@ export function Navbar({
                             damping: 30,
                           }}
                         />
+
+                        {/* Icon Floating di bawah tombol yang aktif */}
+                        <motion.div
+                          layoutId="activeIconTab"
+                          initial={{
+                            opacity: 0,
+                            y: -5,
+                            x: "-50%",
+                          }}
+                          animate={{
+                            opacity: 1,
+                            y: 34,
+                            x: "-50%",
+                          }} // Menambahkan x: -50% agar tetap di tengah
+                          transition={{
+                            default: {
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 30,
+                            },
+                          }}
+                          className="navbar-active-icon bg-muted/40 text-background animate-pulse"
+                        >
+                          {/* Elemen Icon yang melakukan floating di dalam tab */}
+                          <motion.div
+                            animate={{ y: [0, 4, 0] }}
+                            transition={{
+                              repeat: Infinity,
+                              duration: 2,
+                              ease: "easeInOut",
+                            }}
+                            className="flex items-center justify-center scale-150"
+                          >
+                            {PAGE_ICONS[page.id]}
+                          </motion.div>
+                        </motion.div>
                       </>
                     )}
 
