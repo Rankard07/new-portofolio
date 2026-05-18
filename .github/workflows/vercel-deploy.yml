@@ -1,0 +1,10 @@
+name: Manual Deploy to Vercel
+on:
+  workflow_dispatch: # Memicu tombol manual
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel Build
+        run: curl -X POST "https://api.vercel.com/v1/integrations/deploy/prj_SqnZrQ8kC07kNCoysdOMqDGXFGRb/8JD6KZXkuf"
