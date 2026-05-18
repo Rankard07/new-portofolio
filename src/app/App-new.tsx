@@ -46,7 +46,7 @@ export default function App() {
   const [page, setPage] = useState<Page>("home");
   const [direction, setDirection] = useState(0);
 
-  const allPageIds = PAGES.map((p) => p.id) as [
+  const allPageIds = PAGES.map((page) => page.id) as [
     Page,
     ...Page[],
   ];

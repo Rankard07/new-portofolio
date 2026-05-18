@@ -19,7 +19,7 @@ import { useEffect, useRef } from "react";
 
 /* ---------- KONFIGURASI ---------- */
 const CONFIG = {
-  PARTICLE_COUNT: 6000, // Jumlah total bintang. (Mempengaruhi kepadatan visual galaksi)
+  PARTICLE_COUNT: 5000, // Jumlah total bintang. (Mempengaruhi kepadatan visual galaksi)
   GAS_COUNT: 100, // Jumlah awan nebula. (Mempengaruhi ketebalan kabut warna di latar belakang)
   ARM_STRENGTH: 0.85, // Kerapatan spiral. (Mempengaruhi seberapa jelas bentuk lengan galaksi terbentuk)
   SPIRAL_ARMS: 3, // Jumlah lengan galaksi. (Mempengaruhi struktur percabangan galaksi)
@@ -51,30 +51,42 @@ const STAR_COLORS: Record<
   }
 > = {
   o: {
-    r: 120,
-    g: 180,
-    b: 255,
+    // r: 120,
+    // g: 180,
+    // b: 255,
+    r: 255,
+    g: 0,
+    b: 0,
     sizeMult: 4.0,
     glowMult: 2.2,
   }, // paling besar & terang
   b: {
-    r: 190,
-    g: 220,
-    b: 255,
+    // r: 190,
+    // g: 220,
+    // b: 255,
+    r: 0,
+    g: 0,
+    b: 0,
     sizeMult: 3.0,
     glowMult: 1.8,
   },
   a: {
-    r: 245,
-    g: 250,
+    // r: 245,
+    // g: 250,
+    // b: 255,
+    r: 0,
+    g: 0,
     b: 255,
     sizeMult: 2.0,
     glowMult: 1.2,
   },
   f: {
-    r: 255,
-    g: 245,
-    b: 230,
+    // r: 255,
+    // g: 245,
+    // b: 230,
+    r: 0,
+    g: 255,
+    b: 0,
     sizeMult: 1.5,
     glowMult: 0.9,
   },
@@ -135,11 +147,14 @@ function pickStarType(): string {
     string,
     number,
   ][];
-  const total = entries.reduce((s, [, w]) => s + w, 0);
-  let r = Math.random() * total;
-  for (const [t, w] of entries) {
-    r -= w;
-    if (r <= 0) return t;
+  const totalWeight = entries.reduce(
+    (accumulator, [, weight]) => accumulator + weight,
+    0,
+  );
+  let randomWeight = Math.random() * totalWeight;
+  for (const [starType, weight] of entries) {
+    randomWeight -= weight;
+    if (randomWeight <= 0) return starType;
   }
   return "m";
 }
@@ -153,38 +168,41 @@ function generateParticles(): Particle[] {
   const particles: Particle[] = [];
 
   for (
-    let i = 0;
-    i < CONFIG.PARTICLE_COUNT + CONFIG.GAS_COUNT;
-    i++
+    let index = 0;
+    index < CONFIG.PARTICLE_COUNT + CONFIG.GAS_COUNT;
+    index++
   ) {
-    const isGas = i >= CONFIG.PARTICLE_COUNT;
-    const u = Math.sqrt(Math.random()); // kepadatan ke pusat
-    const spiralT = u;
+    const isGas = index >= CONFIG.PARTICLE_COUNT;
+    const densityFactor = Math.sqrt(Math.random()); // kepadatan ke pusat
+    const spiralPosition = densityFactor;
 
     const followArm = Math.random() < CONFIG.ARM_STRENGTH;
     const armIndex = Math.floor(
       Math.random() * CONFIG.SPIRAL_ARMS,
     );
     const baseAngle =
-      (spiralT * 360 * CONFIG.SPIRAL_TURNS +
+      (spiralPosition * 360 * CONFIG.SPIRAL_TURNS +
         (armIndex * 360) / CONFIG.SPIRAL_ARMS) %
       360;
     const armNoise = (Math.random() - 0.5) * 40;
-    const angle0 = followArm
+    const initialAngle = followArm
       ? baseAngle + armNoise
       : Math.random() * 360;
 
     const orbitJitter = 1 + (Math.random() - 0.5) * 0.3;
     const radiusX =
-      (CONFIG.ORBIT_BASE_X + u * CONFIG.ORBIT_EXPAND_X) *
+      (CONFIG.ORBIT_BASE_X +
+        densityFactor * CONFIG.ORBIT_EXPAND_X) *
       orbitJitter;
     const radiusY =
-      (CONFIG.ORBIT_BASE_Y + u * CONFIG.ORBIT_EXPAND_Y) *
+      (CONFIG.ORBIT_BASE_Y +
+        densityFactor * CONFIG.ORBIT_EXPAND_Y) *
       orbitJitter *
       (0.9 + Math.random() * 0.25);
 
     const speed =
-      (6 + (1 - u) * 18) * CONFIG.ROTATION_SPEED;
+      (6 + (1 - densityFactor) * 18) *
+      CONFIG.ROTATION_SPEED;
 
     let color: { r: number; g: number; b: number };
     let size: number;
@@ -213,17 +231,22 @@ function generateParticles(): Particle[] {
     } else {
       /* Star = berdasarkan tipe spektral */
       const type = pickStarType();
-      const spec = STAR_COLORS[type];
-      color = { r: spec.r, g: spec.g, b: spec.b };
-      size = (0.3 + Math.random() * 0.8) * spec.sizeMult;
-      glow = spec.glowMult;
+      const spectralData = STAR_COLORS[type];
+      color = {
+        r: spectralData.r,
+        g: spectralData.g,
+        b: spectralData.b,
+      };
+      size =
+        (0.3 + Math.random() * 0.8) * spectralData.sizeMult;
+      glow = spectralData.glowMult;
       opacity = 0.8 + Math.random() * 0.2;
     }
 
     particles.push({
       x: 0,
       y: 0,
-      angle: angle0,
+      angle: initialAngle,
       radiusX,
       radiusY,
       speed,
@@ -253,7 +276,8 @@ export default function CanvasGalaxy({
 }: CanvasGalaxyProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
-  const rafRef = useRef<number>(0);
+  const requestAnimationFrameRef = useRef<number>(0);
+  const isHoveringBlackHoleRef = useRef(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -265,16 +289,51 @@ export default function CanvasGalaxy({
     /* Resize canvas ke ukuran container */
     function resize() {
       const parent = canvas!.parentElement!;
-      const dpr = window.devicePixelRatio || 1;
-      canvas!.width = parent.clientWidth * dpr;
-      canvas!.height = parent.clientHeight * dpr;
-      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0); // CSS pixel scale
+      const devicePixelRatio = window.devicePixelRatio || 1;
+      canvas!.width = parent.clientWidth * devicePixelRatio;
+      canvas!.height =
+        parent.clientHeight * devicePixelRatio;
+      ctx!.setTransform(
+        devicePixelRatio,
+        0,
+        0,
+        devicePixelRatio,
+        0,
+        0,
+      ); // CSS pixel scale
       canvas!.style.width = parent.clientWidth + "px";
       canvas!.style.height = parent.clientHeight + "px";
     }
 
     resize();
     particlesRef.current = generateParticles();
+
+    // Event listeners for hover effect on black hole
+    const handleMouseMove = (event: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      const canvasHeight =
+        canvas.parentElement!.clientHeight;
+      const canvasWidth = canvas.parentElement!.clientWidth;
+      const centerX = canvasWidth / 2;
+      const centerY = canvasHeight / 2;
+
+      // Black hole's outer radius (photon ring) is 36
+      const distance = Math.sqrt(
+        Math.pow(mouseX - centerX, 2) +
+          Math.pow(mouseY - centerY, 2),
+      );
+      isHoveringBlackHoleRef.current = distance < 36;
+    };
+
+    const handleMouseLeave = () => {
+      isHoveringBlackHoleRef.current = false;
+    };
+
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mouseleave", handleMouseLeave);
 
     /* Helper untuk pre-render tekstur glow/gas (Offscreen Canvas) agar tidak lag */
     const spriteCache = new Map<
@@ -295,9 +354,9 @@ export default function CanvasGalaxy({
       const size = 64; // Resolusi sprite cukup kecil agar hemat memori
       canvas.width = size;
       canvas.height = size;
-      const tCtx = canvas.getContext("2d")!;
+      const tempContext = canvas.getContext("2d")!;
       const center = size / 2;
-      const grad = tCtx.createRadialGradient(
+      const grad = tempContext.createRadialGradient(
         center,
         center,
         0,
@@ -310,8 +369,8 @@ export default function CanvasGalaxy({
         Math.max(0.01, Math.min(falloff, 1.0)),
         `rgba(${r},${g},${b},0)`,
       ); // Transparan total di titik falloff
-      tCtx.fillStyle = grad;
-      tCtx.fillRect(0, 0, size, size);
+      tempContext.fillStyle = grad;
+      tempContext.fillRect(0, 0, size, size);
       spriteCache.set(key, canvas);
       return canvas;
     }
@@ -320,89 +379,97 @@ export default function CanvasGalaxy({
     let lastTime = performance.now();
 
     function loop(now: number) {
-      const dt = (now - lastTime) / 1000;
+      const deltaTime = (now - lastTime) / 1000;
       lastTime = now;
 
-      const w = canvas!.parentElement!.clientWidth;
-      const h = canvas!.parentElement!.clientHeight;
-      const cx = w / 2;
-      const cy = h / 2;
+      const canvasWidth =
+        canvas!.parentElement!.clientWidth;
+      const canvasHeight =
+        canvas!.parentElement!.clientHeight;
+      const centerX = canvasWidth / 2;
+      const centerY = canvasHeight / 2;
 
-      ctx!.clearRect(0, 0, w, h);
+      ctx!.clearRect(0, 0, canvasWidth, canvasHeight);
 
       /* ---- Draw Black Hole (opsional) ---- */
       if (showBlackHole) {
         /* Event horizon */
         ctx!.beginPath();
-        ctx!.arc(cx, cy, 28, 0, Math.PI * 2);
+        ctx!.arc(centerX, centerY, 28, 0, Math.PI * 2);
         ctx!.fillStyle = "#000";
         ctx!.fill();
 
         /* Photon ring (glow tipis di sekitar) */
         ctx!.beginPath();
-        ctx!.arc(cx, cy, 36, 0, Math.PI * 2);
-        ctx!.strokeStyle = "rgba(255,255,255,0.06)";
-        ctx!.lineWidth = 1.5;
+        ctx!.arc(centerX, centerY, 36, 0, Math.PI * 2);
+        if (isHoveringBlackHoleRef.current) {
+          ctx!.strokeStyle = "rgba(255,255,255,0.4)"; // Brighter white on hover
+          ctx!.lineWidth = 2; // Slightly thicker
+        } else {
+          ctx!.strokeStyle = "rgba(255,255,255,0.06)";
+          ctx!.lineWidth = 1.5;
+        }
         ctx!.stroke();
       }
 
-      /* ---- Update particle positions ---- */
-      // for (const p of particlesRef.current) {
-      //   p.angle += p.speed * dt;
-      //   const rad = (p.angle * Math.PI) / 180;
-      //   const x = Math.cos(rad) * p.radiusX;
-      //   const y = Math.sin(rad) * p.radiusY;
-      //   p.x = cx + x * p.tiltCos - y * p.tiltSin;
-      //   p.y = cy + x * p.tiltSin + y * p.tiltCos;
-      // }
-
-      ctx!.clearRect(0, 0, w, h);
-
       /* ---- Update particle logic (Hanya update sudut) ---- */
-      for (const p of particlesRef.current) {
-        p.angle += p.speed * dt;
+      for (const particle of particlesRef.current) {
+        particle.angle += particle.speed * deltaTime;
       }
 
       /* Helper untuk menghitung dan menggambar instance secara simetris */
       const drawInstances = (
-        p: Particle,
-        drawFn: (x: number, y: number) => void,
+        particle: Particle,
+        drawFunction: (x: number, y: number) => void,
       ) => {
-        for (let m = 0; m < CONFIG.VISUAL_MULTIPLIER; m++) {
+        for (
+          let multiplierIndex = 0;
+          multiplierIndex < CONFIG.VISUAL_MULTIPLIER;
+          multiplierIndex++
+        ) {
           // Hitung sudut virtual: sudut asli + offset simetris (360 derajat dibagi jumlah multiplier)
           const virtualAngle =
-            p.angle + (m * 360) / CONFIG.VISUAL_MULTIPLIER;
+            particle.angle +
+            (multiplierIndex * 360) /
+              CONFIG.VISUAL_MULTIPLIER;
           const rad = (virtualAngle * Math.PI) / 180;
 
-          const x = Math.cos(rad) * p.radiusX;
-          const y = Math.sin(rad) * p.radiusY;
-          const dx = cx + x * p.tiltCos - y * p.tiltSin;
-          const dy = cy + x * p.tiltSin + y * p.tiltCos;
+          const x = Math.cos(rad) * particle.radiusX;
+          const y = Math.sin(rad) * particle.radiusY;
+          const drawX =
+            centerX +
+            x * particle.tiltCos -
+            y * particle.tiltSin;
+          const drawY =
+            centerY +
+            x * particle.tiltSin +
+            y * particle.tiltCos;
 
-          drawFn(dx, dy);
+          drawFunction(drawX, drawY);
         }
       };
 
       /* ---- Draw Gas (batch, no shadow) ---- */
-      for (const p of particlesRef.current) {
-        if (p.kind !== "gas") continue;
+      for (const particle of particlesRef.current) {
+        if (particle.kind !== "gas") continue;
         // Ambil sprite dari cache dan gunakan globalAlpha untuk transparansi
         // Gas selalu menggunakan falloff 1.0 agar tetap halus
         const sprite = getGlowSprite(
-          p.color.r,
-          p.color.g,
-          p.color.b,
+          particle.color.r,
+          particle.color.g,
+          particle.color.b,
           1.0,
         );
-        ctx!.globalAlpha = p.opacity;
-        drawInstances(p, (x, y) => {
+
+        ctx!.globalAlpha = particle.opacity;
+        drawInstances(particle, (x, y) => {
           // drawImage jauh lebih cepat daripada menggambar path lingkaran + gradien di setiap frame
           ctx!.drawImage(
             sprite,
-            x - p.size,
-            y - p.size,
-            p.size * 2,
-            p.size * 2,
+            x - particle.size,
+            y - particle.size,
+            particle.size * 2,
+            particle.size * 2,
           );
         });
       }
@@ -410,21 +477,22 @@ export default function CanvasGalaxy({
 
       /* ---- Draw Star Glow (additive blending, batch) ---- */
       ctx!.globalCompositeOperation = "lighter";
-      for (const p of particlesRef.current) {
-        if (p.kind !== "star") continue;
+      for (const particle of particlesRef.current) {
+        if (particle.kind !== "star") continue;
         const glowSize =
-          p.size *
-          (CONFIG.STAR_GLOW_INTENSITY + p.glow * 2);
-        const glowOpacity = p.opacity * p.glow * 0.25;
+          particle.size *
+          (CONFIG.STAR_GLOW_INTENSITY + particle.glow * 2);
+        const glowOpacity =
+          particle.opacity * particle.glow * 0.25;
         const sprite = getGlowSprite(
-          p.color.r,
-          p.color.g,
-          p.color.b,
+          particle.color.r,
+          particle.color.g,
+          particle.color.b,
           CONFIG.STAR_GLOW_FALLOFF,
         );
         ctx!.globalAlpha = glowOpacity;
 
-        drawInstances(p, (x, y) => {
+        drawInstances(particle, (x, y) => {
           ctx!.drawImage(
             sprite,
             x - glowSize,
@@ -438,53 +506,22 @@ export default function CanvasGalaxy({
       ctx!.globalCompositeOperation = "source-over";
 
       /* ---- Draw Star Cores (batch) ---- */
-      for (const p of particlesRef.current) {
-        if (p.kind !== "star") continue;
-        ctx!.fillStyle = `rgba(${p.color.r},${p.color.g},${p.color.b},${p.opacity})`;
-        drawInstances(p, (x, y) => {
+      for (const particle of particlesRef.current) {
+        if (particle.kind !== "star") continue;
+        ctx!.fillStyle = `rgba(${particle.color.r},${particle.color.g},${particle.color.b},${particle.opacity})`;
+        drawInstances(particle, (x, y) => {
           ctx!.beginPath();
-          ctx!.arc(x, y, p.size, 0, Math.PI * 2);
+          ctx!.arc(x, y, particle.size, 0, Math.PI * 2);
           ctx!.fill();
         });
       }
 
-      rafRef.current = requestAnimationFrame(loop);
-
-      /* ---- Draw Gas (batch, no shadow) ---- */
-      // for (const p of particlesRef.current) {
-      //   if (p.kind !== "gas") continue;
-      //   ctx!.fillStyle = `rgba(${p.color.r},${p.color.g},${p.color.b},${p.opacity})`;
-      //   ctx!.beginPath();
-      //   ctx!.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      //   ctx!.fill();
-      // }
-
-      /* ---- Draw Star Glow (additive blending, batch) ---- */
-      // ctx!.globalCompositeOperation = "lighter";
-      // for (const p of particlesRef.current) {
-      //   if (p.kind !== "star") continue;
-      //   const glowSize = p.size * (1.5 + p.glow * 2);
-      //   const glowOpacity = p.opacity * p.glow * 0.25;
-      //   ctx!.fillStyle = `rgba(${p.color.r},${p.color.g},${p.color.b},${glowOpacity})`;
-      //   ctx!.beginPath();
-      //   ctx!.arc(p.x, p.y, glowSize, 0, Math.PI * 2);
-      //   ctx!.fill();
-      // }
-      // ctx!.globalCompositeOperation = "source-over";
-
-      /* ---- Draw Star Cores (batch) ---- */
-      // for (const p of particlesRef.current) {
-      //   if (p.kind !== "star") continue;
-      //   ctx!.fillStyle = `rgba(${p.color.r},${p.color.g},${p.color.b},${p.opacity})`;
-      //   ctx!.beginPath();
-      //   ctx!.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      //   ctx!.fill();
-      // }
-
-      // rafRef.current = requestAnimationFrame(loop);
+      requestAnimationFrameRef.current =
+        requestAnimationFrame(loop);
     }
 
-    rafRef.current = requestAnimationFrame(loop);
+    requestAnimationFrameRef.current =
+      requestAnimationFrame(loop);
 
     const onResize = () => {
       resize();
@@ -493,7 +530,9 @@ export default function CanvasGalaxy({
     window.addEventListener("resize", onResize);
 
     return () => {
-      cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(
+        requestAnimationFrameRef.current,
+      );
       window.removeEventListener("resize", onResize);
     };
   }, [showBlackHole]);

@@ -102,6 +102,16 @@
     0 0 50px 12px rgba(80, 80, 200, 0.04);
   z-index: 5;
 }
+.black-hole-center-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 500px; /* Memberikan ruang untuk rings black hole */
+  height: 500px;
+  transform: translate(-50%, -50%);
+  /* z-index tinggi agar center & ring berada di atas galaxy disk/partikel */
+  z-index: 10;
+}
 
 /* ================================================ */
 /* .black-hole-ring = Cincin putar di sekitar pusat */
@@ -279,11 +289,6 @@
 }
 */
 
-/*-----------------------------------------------*/
-/* Black Hole as the center of Galaxy */
-/* TODO Later*/
-/*-----------------------------------------------*/
-
 .galaxy-scene {
   transform-origin: 50% 50%;
   /* background gelap solid = mencegah flickering putih saat animasi berat */
@@ -453,15 +458,6 @@
   );
 }
 */
-
-.black-hole-center-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* z-index tinggi agar center & ring berada di atas galaxy disk/partikel */
-  z-index: 10;
-}
 
 /*-----------------------------------------------*/
 /* Star Particles */

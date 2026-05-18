@@ -195,8 +195,8 @@ export function OtherSection({
         {/* {gasBlobs.map((g, idx) => (
           <div
             key={`gas-${g.id}`}
-            ref={(el) => {
-              gasElsRef.current[idx] = el;
+            ref={(element) => {
+              gasElsRef.current[idx] = element;
             }}
             className="gas-blob"
             style={{
@@ -213,7 +213,7 @@ export function OtherSection({
         <div className="galaxy-cloud galaxy-cloud-2" />
         <div className="galaxy-cloud galaxy-cloud-3" /> */}
 
-        <div
+        {/* <div
           // onClick={onBack}
           // onMouseEnter={() => setIsHovered(true)}
           onClick={handleBackWithAnimation}
@@ -237,13 +237,34 @@ export function OtherSection({
               ? "pointer-events-none"
               : "cursor-pointer"
           }
-        >
+        > */}
+
+        {/* Interactive Layer for Black Hole */}
+        <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">
           {/* Black Hole Center Wrapper — menampung center, pulse, dan ring */}
           <div
             ref={centerWrapperRef}
             className="black-hole-center-wrapper"
           >
-            <div className="black-hole-center" />
+            <div
+              className={`black-hole-center pointer-events-auto ${isExiting ? "pointer-events-none" : "cursor-pointer"}`}
+              onClick={handleBackWithAnimation}
+              onMouseEnter={() =>
+                !isExiting && setIsHovered(true)
+              }
+              onMouseLeave={() => setIsHovered(false)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (
+                  (e.key === "Enter" || e.key === " ") &&
+                  !isExiting
+                ) {
+                  handleBackWithAnimation();
+                }
+              }}
+              aria-label="Go back"
+            />
             <div className="black-hole-pulse" />
             <div className="black-hole-ring" />
           </div>
@@ -251,7 +272,7 @@ export function OtherSection({
         </div>
 
         {/* Galaxy particles via Canvas (performant) */}
-        <CanvasGalaxy />
+        <CanvasGalaxy showBlackHole={false} />
       </div>
 
       {/*
