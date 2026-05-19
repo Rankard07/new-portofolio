@@ -77,6 +77,8 @@
 }
 
 @theme inline {
+  --breakpoint-8xl: 1480px;
+
   --font-serif: "Lora Variable", serif;
   --font-heading: "Merriweather Variable", serif;
   --color-sidebar-ring: var(--sidebar-ring);

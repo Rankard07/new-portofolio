@@ -93,8 +93,6 @@ function CVDownload() {
           px-5 py-2.5 rounded-full gap-2  
           transition-all duration-300
 
-          // ark:hover:hadow-[0_0_40px_rgba(160,124,254,1),0_0_120px_rgba(254,143,181,0.4)]
-          // over:hadow-[0_0_40px_rgba(160,124,254,1),0_0_120px_rgba(254,143,181,0.4)]
           "
             onClick={() => {
               // TODO: Ganti dengan path CV yang sesungguhnya
@@ -144,21 +142,23 @@ function MobilePageDropdown({
         align="center"
         className="min-w-35"
       >
-        {PAGES.map((page) => (
-          <DropdownMenuItem
-            key={page.id}
-            onClick={() => {
-              onPageChange?.(page.id);
-              setOpen(false);
-            }}
-            className={cn(
-              "cursor-pointer",
-              activePage === page.id && "bg-accent",
-            )}
-          >
-            {page.label}
-          </DropdownMenuItem>
-        ))}
+        {PAGES.filter((page) => page.id !== "contact").map(
+          (page) => (
+            <DropdownMenuItem
+              key={page.id}
+              onClick={() => {
+                onPageChange?.(page.id);
+                setOpen(false);
+              }}
+              className={cn(
+                "cursor-pointer",
+                activePage === page.id && "bg-accent",
+              )}
+            >
+              {page.label}
+            </DropdownMenuItem>
+          ),
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

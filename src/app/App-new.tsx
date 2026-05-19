@@ -8,7 +8,7 @@ import { ContactSection } from "@/pages/ContactSection";
 import { HeroSection } from "@/pages/home/HeroSection";
 import { AboutSection } from "@/pages/home/AboutSection";
 import { SkillsSection } from "@/pages/home/SkillSection";
-import { ProjectsSection } from "@/pages/project/ProjectSection";
+import { ProjectsSection } from "@/pages/project/ProjectPage";
 import { OtherSection } from "@/pages/other/OtherSection";
 
 import { Navbar } from "@/components/ui/created/Navbar";
@@ -94,7 +94,8 @@ export default function App() {
       defaultTheme="dark"
       storageKey="vite-ui-theme"
     >
-      <div className="min-h-screen bg-background">
+      {/* Background color */}
+      <div className="min-h-screen bg-red-500">
         {/* Navbar - Hidden on Other page */}
         {page !== "other" && (
           <Navbar
@@ -103,12 +104,10 @@ export default function App() {
             className="w-full"
           />
         )}
-
         {/* Table of Contents - only on Home page */}
         {/* {page === "home" && <TableOfContents />} */}
-
         {/* Page Content with Slide Animation */}
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden bg-amber-500">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={page}
@@ -132,9 +131,11 @@ export default function App() {
               className="w-full"
             >
               {page === "home" && (
-                <div className="w-full max-w-280 mx-auto px-2 sm:px-4 lg:px-8">
+                <div className="w-full max-w-[85%] mx-auto px-2 sm:px-4 lg:px-8 bg-blue-600">
                   <div id="hero">
-                    <HeroSection />
+                    <HeroSection
+                      onPageChange={handlePageChange}
+                    />
                   </div>
                   <div id="about">
                     <AboutSection />
@@ -165,7 +166,6 @@ export default function App() {
             </motion.div>
           </AnimatePresence>
         </div>
-
         {/* Footer - Hidden on Other page */}
         {page !== "other" && <Footer />}
       </div>

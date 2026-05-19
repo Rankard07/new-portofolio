@@ -67,7 +67,10 @@ export function AboutSection({
   skills = DEFAULT_SKILLS,
 }: AboutSectionProps) {
   return (
-    <section id="about" className="py-10 px-4 sm:px-6 lg:px-8">
+    <section
+      id="about"
+      className="py-10 px-4 sm:px-6 lg:px-8"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="bg-card border border-border rounded-xl p-8 lg:p-12 transition duration-500 ease-in-out hover:border-fuchsia-500/50 dark:hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 hover:scale-105 relative overflow-hidden group">
           <CardHoverOverlays />
@@ -78,21 +81,32 @@ export function AboutSection({
           <div className="relative z-10 grid md:grid-cols-2 gap-12">
             {/* Bio Section */}
             <div>
-              <p className="text-muted-foreground mb-4">{paragraph1}</p>
-              <p className="text-muted-foreground mb-4">{paragraph2}</p>
-              <p className="text-muted-foreground">{paragraph3}</p>
+              <p className="text-muted-foreground mb-4">
+                {paragraph1}
+              </p>
+              <p className="text-muted-foreground mb-4">
+                {paragraph2}
+              </p>
+              <p className="text-muted-foreground">
+                {paragraph3}
+              </p>
             </div>
 
             {/* Skills Section */}
             <div className="flex flex-col gap-6">
               {skills.map((skill, index) => (
-                <div key={index} className="flex items-start gap-4">
+                <div
+                  key={index}
+                  className="flex items-start gap-4"
+                >
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
                     {skill.icon}
                   </div>
                   <div>
                     <h4 className="mb-2">{skill.title}</h4>
-                    <p className="text-muted-foreground">{skill.description}</p>
+                    <p className="text-muted-foreground">
+                      {skill.description}
+                    </p>
                   </div>
                 </div>
               ))}

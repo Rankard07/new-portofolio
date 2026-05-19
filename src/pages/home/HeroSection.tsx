@@ -2,11 +2,17 @@ import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 import { CardHoverOverlays } from "@/components/ui/created/CardHoverOverlays";
 
-export function HeroSection() {
+interface HeroSectionProps {
+  onPageChange?: (page: string) => void;
+}
+
+export function HeroSection({
+  onPageChange,
+}: HeroSectionProps) {
   return (
     <section
       id="hero"
-      className="relative py-10 pt-20 px-2 sm:px-4 lg:px-8 overflow-hidden"
+      className="relative py-10 pt-20 px-2 sm:px-4 lg:px-8 "
     >
       <div className="max-w-7xl mx-auto relative">
         <div className="bg-card border border-border rounded-xl p-4 sm:p-8 lg:p-12 transition duration-500 ease-in-out hover:border-fuchsia-500/50 dark:hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 hover:scale-105 relative overflow-hidden group">
@@ -27,7 +33,7 @@ export function HeroSection() {
               {/* Badge - End */}
 
               {/* Title - Start */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl mb-6 break-words">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl mb-6 wrap-break-word">
                 Front-End Developer &<br />
                 <span className="text-primary">
                   UI/UX Designer
@@ -46,19 +52,19 @@ export function HeroSection() {
 
               {/* Buttons - Start */}
               <div className="flex gap-4 justify-center lg:justify-start">
-                <a
-                  href="#contact"
-                  className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
+                <Button
+                  variant="customSpecial"
+                  onClick={() => onPageChange?.("contact")}
+                  className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity cursor-pointer"
                 >
                   Get In Touch
-                </a>
-                <Button asChild>
-                  <a
-                    href="#projects"
-                    className="px-6 py-3 border border-border rounded-lg hover:bg-accent transition-colors"
-                  >
-                    View Projects
-                  </a>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => onPageChange?.("project")}
+                  className="px-6 py-3 border border-border rounded-lg hover:bg-accent transition-colors cursor-pointer"
+                >
+                  View Projects
                 </Button>
               </div>
               {/* Buttons - End */}
