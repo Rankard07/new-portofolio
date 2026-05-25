@@ -95,7 +95,7 @@ export default function App() {
       storageKey="vite-ui-theme"
     >
       {/* Background color */}
-      <div className="min-h-screen bg-red-500">
+      <div className="min-h-screen ">
         {/* Navbar - Hidden on Other page */}
         {page !== "other" && (
           <Navbar
@@ -107,7 +107,7 @@ export default function App() {
         {/* Table of Contents - only on Home page */}
         {/* {page === "home" && <TableOfContents />} */}
         {/* Page Content with Slide Animation */}
-        <div className="relative overflow-hidden bg-amber-500">
+        <div className="relative overflow-hidden ">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={page}
@@ -131,7 +131,7 @@ export default function App() {
               className="w-full"
             >
               {page === "home" && (
-                <div className="w-full max-w-[85%] mx-auto px-2 sm:px-4 lg:px-8 bg-blue-600">
+                <div className="w-full max-w-[85%] mx-auto px-2 sm:px-4 lg:px-8 ">
                   <div id="hero">
                     <HeroSection
                       onPageChange={handlePageChange}

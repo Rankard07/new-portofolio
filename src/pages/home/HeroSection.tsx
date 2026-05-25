@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
+// import { Sparkles } from "lucide-react";
 import { CardHoverOverlays } from "@/components/ui/created/CardHoverOverlays";
 
 interface HeroSectionProps {
@@ -22,13 +22,13 @@ export function HeroSection({
             <div className="flex-1 text-center lg:text-left">
               {/* Badge - Start */}
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent rounded-full mb-6">
-                <Sparkles
+                {/* <Sparkles
                   size={16}
                   className="text-primary"
                 />
                 <span className="text-sm">
                   Available for opportunities
-                </span>
+                </span> */}
               </div>
               {/* Badge - End */}
 

@@ -1,18 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ChevronDown,
   Code2,
   FileText,
   Home,
   FolderGit2,
-  // Sparkles,
+  Sparkles,
   Mail,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MobileHamburger } from "./MobileHamburger";
 // import ThemeModeToggle from "./ModeToggle";
 import { AnimatedThemeToggler } from "../animated-theme-toggler";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { Button } from "../button";
 import {
   DropdownMenu,
@@ -65,7 +65,7 @@ const PAGE_ICONS: Record<string, React.ReactNode> = {
   home: <Home size={14} />,
   project: <FolderGit2 size={14} />,
   contact: <Mail size={14} />,
-  // other: <Sparkles size={14} />,
+  other: <Sparkles size={14} />,
 };
 
 // ============================================
@@ -174,6 +174,32 @@ export function Navbar({
   onPageChange,
   className,
 }: NavbarProps) {
+  // State untuk mengontrol kemunculan otomatis dan hover
+  const [showOtherHint, setShowOtherHint] = useState(false);
+  const [isHoveringOther, setIsHoveringOther] =
+    useState(false);
+
+  // Logika untuk menampilkan hint secara otomatis saat pertama kali load (selama beberapa detik)
+  useEffect(() => {
+    if (activePage !== "other") {
+      // Muncul setelah 2 detik
+      const showTimer = setTimeout(
+        () => setShowOtherHint(true),
+        2000,
+      );
+      // Hilang setelah 5 detik (tampil selama 5 detik)
+      const hideTimer = setTimeout(
+        () => setShowOtherHint(false),
+        5000,
+      );
+
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, [activePage]);
+
   return (
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
@@ -221,6 +247,14 @@ export function Navbar({
                 {PAGES.map((page) => (
                   <button
                     key={page.id}
+                    onMouseEnter={() => {
+                      if (page.id === "other")
+                        setIsHoveringOther(true);
+                    }}
+                    onMouseLeave={() => {
+                      if (page.id === "other")
+                        setIsHoveringOther(false);
+                    }}
                     onClick={() => onPageChange?.(page.id)}
                     className={cn(
                       "relative px-5 py-1.5 rounded-full text-sm font-medium transition-colors duration-200",
@@ -310,6 +344,55 @@ export function Navbar({
                     <span className="relative z-10">
                       {page.label}
                     </span>
+
+                    {/* POP-UP Hint khusus untuk tombol 'Other' saat sedang tidak di page Other */}
+                    <AnimatePresence>
+                      {page.id === "other" &&
+                        activePage !== "other" &&
+                        (showOtherHint ||
+                          isHoveringOther) && (
+                          <motion.div
+                            initial={{
+                              opacity: 0,
+                              y: 10,
+                              scale: 0.8,
+                            }}
+                            animate={{
+                              opacity: 1,
+                              y: 0,
+                              scale: 1,
+                            }}
+                            exit={{
+                              opacity: 0,
+                              y: 10,
+                              scale: 0.8,
+                            }}
+                            transition={{
+                              duration: 0.3,
+                            }}
+                            className="absolute top-full mt-5 left-1/2 -translate-x-1/2 px-3 py-2 bg-primary rounded-xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] border border-primary-foreground/20 whitespace-nowrap pointer-events-none z-50"
+                          >
+                            <div className="flex flex-col items-center">
+                              <span className="text-[9px] font-black text-primary-foreground/60 uppercase tracking-widest leading-none mb-1">
+                                New Spot!
+                              </span>
+                              <div className="flex items-center gap-1.5">
+                                <div className="bg-primary-foreground/20 p-1 rounded-md">
+                                  <Sparkles
+                                    size={12}
+                                    className="text-primary-foreground animate-pulse"
+                                  />
+                                </div>
+                                <span className="text-[11px] text-primary-foreground font-bold tracking-tight">
+                                  Certificate is Here
+                                </span>
+                              </div>
+                            </div>
+                            {/* Tooltip Arrow (Panah ke atas sekarang) */}
+                            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-primary rotate-45" />
+                          </motion.div>
+                        )}
+                    </AnimatePresence>
                   </button>
                 ))}
               </div>
